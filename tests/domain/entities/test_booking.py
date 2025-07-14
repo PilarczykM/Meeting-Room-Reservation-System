@@ -1,5 +1,3 @@
-from datetime import datetime
-
 import pytest
 
 from src.domain.entities.booking import Booking
@@ -45,10 +43,10 @@ def test_booking_attendee_validation(time_slot_1, attendees, expected_exception)
         assert booking.attendees == attendees
 
 
-def test_booking_equality():
+def test_booking_equality(parse_time):
     ts = TimeSlot(
-        start_time=datetime(2024, 7, 14, 9, 0),
-        end_time=datetime(2024, 7, 14, 10, 0),
+        start_time=parse_time("09:00"),
+        end_time=parse_time("10:00"),
     )
     booking1 = Booking(time_slot=ts, booker="Jane Doe", attendees=5)
     booking2 = Booking(time_slot=ts, booker="Jane Doe", attendees=5)
@@ -59,10 +57,10 @@ def test_booking_equality():
     assert booking1 == booking2
 
 
-def test_booking_inequality_different_id():
+def test_booking_inequality_different_id(parse_time):
     ts = TimeSlot(
-        start_time=datetime(2024, 7, 14, 9, 0),
-        end_time=datetime(2024, 7, 14, 10, 0),
+        start_time=parse_time("09:00"),
+        end_time=parse_time("10:00"),
     )
     booking1 = Booking(time_slot=ts, booker="Jane Doe", attendees=5)
     booking2 = Booking(time_slot=ts, booker="Jane Doe", attendees=5)
@@ -70,10 +68,10 @@ def test_booking_inequality_different_id():
     assert booking1 != booking2
 
 
-def test_booking_hashable():
+def test_booking_hashable(parse_time):
     ts = TimeSlot(
-        start_time=datetime(2024, 7, 14, 9, 0),
-        end_time=datetime(2024, 7, 14, 10, 0),
+        start_time=parse_time("09:00"),
+        end_time=parse_time("10:00"),
     )
     booking1 = Booking(time_slot=ts, booker="Jane Doe", attendees=5)
     booking2 = Booking(time_slot=ts, booker="Jane Doe", attendees=5)
