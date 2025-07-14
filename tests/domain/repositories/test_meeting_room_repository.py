@@ -19,25 +19,26 @@ class ConcreteMeetingRoomRepository(MeetingRoomRepository):
         pass
 
 
-class TestMeetingRoomRepository:
-    def test_abstract_methods_exist(self):
-        # Ensure that the abstract methods are defined in the interface
-        assert "save" in MeetingRoomRepository.__abstractmethods__
-        assert "find_by_id" in MeetingRoomRepository.__abstractmethods__
-        assert "find_all" in MeetingRoomRepository.__abstractmethods__
-        assert "delete" in MeetingRoomRepository.__abstractmethods__
+def test_abstract_methods_exist():
+    # Ensure that the abstract methods are defined in the interface
+    assert "save" in MeetingRoomRepository.__abstractmethods__
+    assert "find_by_id" in MeetingRoomRepository.__abstractmethods__
+    assert "find_all" in MeetingRoomRepository.__abstractmethods__
+    assert "delete" in MeetingRoomRepository.__abstractmethods__
 
-    def test_concrete_implementation_must_implement_all_abstract_methods(self):
-        # This test ensures that a concrete implementation cannot be instantiated
-        # unless all abstract methods are implemented.
-        # If any abstract method is not implemented, a TypeError will be raised.
-        try:
-            ConcreteMeetingRoomRepository()
-        except TypeError:
-            pytest.fail("ConcreteMeetingRoomRepository did not implement all abstract methods")
 
-    def test_concrete_implementation_can_be_instantiated(self):
-        # This test ensures that our dummy concrete implementation can be instantiated
-        # which implies it has implemented all abstract methods.
-        repo = ConcreteMeetingRoomRepository()
-        assert isinstance(repo, MeetingRoomRepository)
+def test_concrete_implementation_must_implement_all_abstract_methods():
+    # This test ensures that a concrete implementation cannot be instantiated
+    # unless all abstract methods are implemented.
+    # If any abstract method is not implemented, a TypeError will be raised.
+    try:
+        ConcreteMeetingRoomRepository()
+    except TypeError:
+        pytest.fail("ConcreteMeetingRoomRepository did not implement all abstract methods")
+
+
+def test_concrete_implementation_can_be_instantiated():
+    # This test ensures that our dummy concrete implementation can be instantiated
+    # which implies it has implemented all abstract methods.
+    repo = ConcreteMeetingRoomRepository()
+    assert isinstance(repo, MeetingRoomRepository)
