@@ -20,31 +20,24 @@ def parse_time(base_date):
 
 
 @pytest.fixture
-def sample_timeslot():
-    start = datetime(2024, 7, 14, 9, 0, 0)
-    end = datetime(2024, 7, 14, 10, 0, 0)
-    return TimeSlot(start_time=start, end_time=end)
-
-
-@pytest.fixture
-def time_slot_1():
+def time_slot_1(parse_time):
     return TimeSlot(
-        start_time=datetime(2024, 7, 14, 9, 0),
-        end_time=datetime(2024, 7, 14, 10, 0),
+        start_time=parse_time("09:00"),
+        end_time=parse_time("10:00"),
     )
 
 
 @pytest.fixture
-def time_slot_2():
+def time_slot_2(parse_time):
     return TimeSlot(
-        start_time=datetime(2024, 7, 14, 10, 0),
-        end_time=datetime(2024, 7, 14, 11, 0),
+        start_time=parse_time("10:00"),
+        end_time=parse_time("11:00"),
     )
 
 
 @pytest.fixture
-def overlapping_time_slot():
+def overlapping_time_slot(parse_time):
     return TimeSlot(
-        start_time=datetime(2024, 7, 14, 9, 30),
-        end_time=datetime(2024, 7, 14, 10, 30),
+        start_time=parse_time("09:30"),
+        end_time=parse_time("10:30"),
     )
