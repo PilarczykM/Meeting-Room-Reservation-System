@@ -1,0 +1,30 @@
+name: Python CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install the latest version of uv and set the python version
+      uses: astral-sh/setup-uv@v6
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: uv sync
+    - name: Run ruff checks (linting and formatting)
+      run: |
+        uv run ruff check .
+        uv run ruff format . --check
+    - name: Run tests
+      if: success()
+      run: uv run pytest
