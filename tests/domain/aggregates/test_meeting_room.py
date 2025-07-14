@@ -16,7 +16,7 @@ def meeting_room():
 def test_meeting_room_initialization(meeting_room):
     assert isinstance(meeting_room, MeetingRoom)
     assert meeting_room.bookings == []
-    assert meeting_room.ROOM_CAPACITY == 20
+    assert meeting_room.capacity == 20
 
 
 def test_book_room_success(meeting_room, time_slot_1):
@@ -31,7 +31,7 @@ def test_book_room_invalid_attendee_count(meeting_room, time_slot_1):
     with pytest.raises(InvalidAttendeeCountError):
         meeting_room.book(time_slot_1, "John Doe", 3)  # Too few attendees
     with pytest.raises(InvalidAttendeeCountError):
-        meeting_room.book(time_slot_1, "John Doe", 21)  # Too many attendees
+        meeting_room.book(time_slot_1, "John Doe", meeting_room.capacity + 1)  # Too many attendees
 
 
 def test_book_room_overlapping_booking(meeting_room, time_slot_1, overlapping_time_slot):
