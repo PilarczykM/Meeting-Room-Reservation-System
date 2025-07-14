@@ -1,0 +1,45 @@
+[project]
+name = "meeting-room-reservation-system"
+version = "0.1.0"
+description = "The Meeting Room Reservation System is a simple application designed to manage bookings for a single conference room. Users can reserve the room for specific time slots, cancel existing bookings, and view all reservations. The system ensures that no overlapping bookings occur and enforces constraints on the number of attendees per booking, maintaining the integrity of the reservation schedule."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.11.7",
+    "rich>=14.0.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = [
+    "E",  # Error
+    "W",  # Warning
+    "F",  # Pyflakes
+    "I",  # Isort
+    "D",  # Docstrings
+    "UP", # pyupgrade
+    "RUF", # Ruff-specific rules
+    "TID", # flake8-tidy-imports
+    "TRY", # tryceratops
+]
+ignore = [
+    "D100", # Missing docstring in public module
+    "D104", # Missing docstring in public package
+    "D107", # Missing docstring in __init__
+    "TRY003", # Avoid specifying long messages outside the exception class
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D"] # Ignore all docstring rules in tests
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.1",
+    "ruff>=0.12.3",
+]
