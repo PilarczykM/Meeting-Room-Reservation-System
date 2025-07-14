@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import timezone
 
 import pytest
 
@@ -6,24 +6,24 @@ from src.domain.entities.timeslot import TimeSlot
 from src.domain.exceptions import InvalidTimeSlotError
 
 
-def test_timeslot_creation_valid():
-    start = datetime(2024, 7, 14, 9, 0, 0)
-    end = datetime(2024, 7, 14, 10, 0, 0)
+def test_timeslot_creation_valid(parse_time):
+    start = parse_time("09:00")
+    end = parse_time("10:00")
     timeslot = TimeSlot(start_time=start, end_time=end)
     assert timeslot.start_time == start
     assert timeslot.end_time == end
 
 
-def test_timeslot_creation_invalid_end_before_start():
-    start = datetime(2024, 7, 14, 10, 0, 0)
-    end = datetime(2024, 7, 14, 9, 0, 0)
+def test_timeslot_creation_invalid_end_before_start(parse_time):
+    start = parse_time("10:00")
+    end = parse_time("09:00")
     with pytest.raises(InvalidTimeSlotError):
         TimeSlot(start_time=start, end_time=end)
 
 
-def test_timeslot_creation_invalid_end_equals_start():
-    start = datetime(2024, 7, 14, 9, 0, 0)
-    end = datetime(2024, 7, 14, 9, 0, 0)
+def test_timeslot_creation_invalid_end_equals_start(parse_time):
+    start = parse_time("09:00")
+    end = parse_time("09:00")
     with pytest.raises(InvalidTimeSlotError):
         TimeSlot(start_time=start, end_time=end)
 
@@ -63,36 +63,36 @@ def test_timeslot_overlaps_with(ts1_start, ts1_end, ts2_start, ts2_end, expected
     assert ts1.overlaps_with(ts2) == expected_overlap
 
 
-def test_timeslot_equality():
+def test_timeslot_equality(parse_time):
     ts1 = TimeSlot(
-        start_time=datetime(2024, 7, 14, 9, 0),
-        end_time=datetime(2024, 7, 14, 10, 0),
+        start_time=parse_time("09:00"),
+        end_time=parse_time("10:00"),
     )
     ts2 = TimeSlot(
-        start_time=datetime(2024, 7, 14, 9, 0),
-        end_time=datetime(2024, 7, 14, 10, 0),
+        start_time=parse_time("09:00"),
+        end_time=parse_time("10:00"),
     )
     ts3 = TimeSlot(
-        start_time=datetime(2024, 7, 14, 9, 0),
-        end_time=datetime(2024, 7, 14, 10, 30),
+        start_time=parse_time("09:00"),
+        end_time=parse_time("10:30"),
     )
 
     assert ts1 == ts2
     assert ts1 != ts3
 
 
-def test_timeslot_comparison_operators():
+def test_timeslot_comparison_operators(parse_time):
     ts1 = TimeSlot(
-        start_time=datetime(2024, 7, 14, 9, 0),
-        end_time=datetime(2024, 7, 14, 10, 0),
+        start_time=parse_time("09:00"),
+        end_time=parse_time("10:00"),
     )
     ts2 = TimeSlot(
-        start_time=datetime(2024, 7, 14, 10, 0),
-        end_time=datetime(2024, 7, 14, 11, 0),
+        start_time=parse_time("10:00"),
+        end_time=parse_time("11:00"),
     )
     ts3 = TimeSlot(
-        start_time=datetime(2024, 7, 14, 8, 0),
-        end_time=datetime(2024, 7, 14, 9, 0),
+        start_time=parse_time("08:00"),
+        end_time=parse_time("09:00"),
     )
 
     assert ts1 < ts2  # ts1 ends when ts2 starts
@@ -105,22 +105,22 @@ def test_timeslot_comparison_operators():
     assert ts3 <= ts1
 
 
-def test_timeslot_hashable():
+def test_timeslot_hashable(parse_time):
     ts1 = TimeSlot(
-        start_time=datetime(2024, 7, 14, 9, 0),
-        end_time=datetime(2024, 7, 14, 10, 0),
+        start_time=parse_time("09:00"),
+        end_time=parse_time("10:00"),
     )
     ts2 = TimeSlot(
-        start_time=datetime(2024, 7, 14, 9, 0),
-        end_time=datetime(2024, 7, 14, 10, 0),
+        start_time=parse_time("09:00"),
+        end_time=parse_time("10:00"),
     )
     assert hash(ts1) == hash(ts2)
     assert len({ts1, ts2}) == 1
 
 
-def test_timeslot_to_utc_no_tzinfo():
-    start = datetime(2024, 7, 14, 9, 0, 0)
-    end = datetime(2024, 7, 14, 10, 0, 0)
+def test_timeslot_to_utc_no_tzinfo(parse_time):
+    start = parse_time("09:00")
+    end = parse_time("10:00")
     timeslot = TimeSlot(start_time=start, end_time=end)
     utc_timeslot = timeslot.to_utc()
 
@@ -130,9 +130,9 @@ def test_timeslot_to_utc_no_tzinfo():
     assert utc_timeslot.end_time.hour == 10
 
 
-def test_timeslot_to_utc_with_tzinfo():
-    start = datetime(2024, 7, 14, 9, 0, 0, tzinfo=timezone.utc)
-    end = datetime(2024, 7, 14, 10, 0, 0, tzinfo=timezone.utc)
+def test_timeslot_to_utc_with_tzinfo(parse_time):
+    start = parse_time("09:00").replace(tzinfo=timezone.utc)
+    end = parse_time("10:00").replace(tzinfo=timezone.utc)
     timeslot = TimeSlot(start_time=start, end_time=end)
     utc_timeslot = timeslot.to_utc()
 
