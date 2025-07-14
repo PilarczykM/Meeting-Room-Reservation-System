@@ -1,0 +1,12 @@
+sequenceDiagram
+    actor User
+
+    %% Flow 2: Canceling a Reservation
+    User->>+MeetingRoom: cancel(bookingId)
+    MeetingRoom->>MeetingRoom: Find Booking by bookingId
+    alt Booking exists
+        MeetingRoom->>MeetingRoom: Remove Booking from bookings list
+        MeetingRoom-->>User: Cancellation confirmed
+    else Booking not found
+        MeetingRoom-->>User: Error: Booking not found
+    end

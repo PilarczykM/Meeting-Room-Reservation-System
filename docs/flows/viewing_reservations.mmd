@@ -1,0 +1,7 @@
+sequenceDiagram
+    actor User
+
+    %% Flow 3: Viewing Reservations
+    User->>+MeetingRoom: listBookings()
+    MeetingRoom->>MeetingRoom: Retrieve bookings list
+    MeetingRoom-->>User: List of Bookings
