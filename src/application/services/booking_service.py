@@ -1,7 +1,7 @@
 import logging
 
+from src.application.commands.commands import CreateBookingCommand
 from src.application.dtos.booking_response import BookingResponse
-from src.application.dtos.commands import CreateBookingCommand
 from src.domain.aggregates.meeting_room import MeetingRoom
 from src.domain.entities.booking import Booking
 from src.domain.entities.timeslot import TimeSlot

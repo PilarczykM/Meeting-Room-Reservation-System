@@ -2,8 +2,8 @@ from unittest.mock import MagicMock
 
 import pytest
 
+from src.application.commands.commands import CancelBookingCommand
 from src.application.dtos.cancellation_request import CancellationRequest
-from src.application.dtos.commands import CancelBookingCommand
 from src.application.exceptions import CancellationFailedError
 from src.application.services.cancellation_service import CancellationService
 from src.domain.entities.booking import Booking

@@ -1,6 +1,6 @@
 import logging
 
-from src.application.dtos.commands import CancelBookingCommand
+from src.application.commands.commands import CancelBookingCommand
 from src.application.exceptions import CancellationFailedError
 
 logger = logging.getLogger(__name__)

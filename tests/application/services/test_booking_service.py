@@ -5,8 +5,8 @@ from unittest.mock import MagicMock
 import pytest
 from pydantic import ValidationError
 
+from src.application.commands.commands import CreateBookingCommand
 from src.application.dtos.booking_request import BookingRequest
-from src.application.dtos.commands import CreateBookingCommand
 from src.application.services.booking_service import BookingService
 from src.domain.entities.booking import Booking
 from src.domain.entities.timeslot import TimeSlot

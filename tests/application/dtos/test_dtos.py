@@ -2,10 +2,10 @@ from datetime import datetime, timedelta
 
 import pytest
 
+from src.application.commands.commands import CancelBookingCommand, CreateBookingCommand
 from src.application.dtos.booking_request import BookingRequest
 from src.application.dtos.booking_response import BookingResponse
 from src.application.dtos.cancellation_request import CancellationRequest
-from src.application.dtos.commands import CancelBookingCommand, CreateBookingCommand
 
 
 def test_booking_request_valid_data():
