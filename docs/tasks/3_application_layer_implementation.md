@@ -52,17 +52,17 @@
 **Branch**: `feature/application-dtos`
 **Reference**: `{ROOT}/docs/PRD.md Section 3.1`, {ROOT}/docs/event_storming/_meeting_room_event_storming.mmd (event storming diagrams)
 
-- [ ] Create application/dtos/ directory
-- [ ] Implement BookingRequest DTO with validation
-- [ ] Implement CancellationRequest DTO
-- [ ] Implement BookingResponse DTO
-- [ ] Create command objects for each operation
-- [ ] Add input validation using pydantic or custom validation
-- [ ] **Tests**: Write tests for DTO validation
-- [ ] **Tests**: Test command object creation
-- [ ] **Tests**: Test validation error scenarios
-- [ ] **Acceptance Criteria**: DTOs validate input data correctly
-- [ ] **Commit**
+- [x] Create application/dtos/ directory
+- [x] Implement BookingRequest DTO with validation
+- [x] Implement CancellationRequest DTO
+- [x] Implement BookingResponse DTO
+- [x] Create command objects for each operation
+- [x] Add input validation using pydantic or custom validation
+- [x] **Tests**: Write tests for DTO validation
+- [x] **Tests**: Test command object creation
+- [x] **Tests**: Test validation error scenarios
+- [x] **Acceptance Criteria**: DTOs validate input data correctly
+- [x] **Commit**
 
 ## Git Workflow Guidelines
 
