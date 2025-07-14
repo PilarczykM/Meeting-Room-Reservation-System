@@ -1,0 +1,37 @@
+flowchart LR
+    %% Actor
+    User[User<br>Actor]
+
+    %% Flow 1: Adding a Reservation
+    User -->|issues| BookRoom[BookRoom<br>Command]
+    BookRoom --> MeetingRoom[MeetingRoom<br>Aggregate]
+    MeetingRoom -->|checks| ValidateTimeSlot[CheckTimeSlot<br>Availability<br>Policy]
+    MeetingRoom -->|checks| ValidateAttendees[CheckAttendees<br>4 ≤ attendees ≤ 20<br>Policy]
+    subgraph Adding Reservation
+        ValidateTimeSlot -->|valid| CreateTimeSlot[Create TimeSlot]
+        CreateTimeSlot --> CreateBooking[Create Booking]
+        CreateBooking --> BookingCreated[BookingCreated<br>Event]
+        BookingCreated -->|stores| MeetingRoom
+        ValidateTimeSlot -->|invalid| TimeSlotError[TimeSlotConflict<br>Error]
+        ValidateAttendees -->|invalid| AttendeesError[InvalidAttendees<br>Error]
+        BookingCreated --> User
+        TimeSlotError --> User
+        AttendeesError --> User
+    end
+
+    %% Styling to mimic Event Storming colors
+    classDef yellow fill:#FFFF99,stroke:#333,stroke-width:2px
+    classDef blue fill:#99CCFF,stroke:#333,stroke-width:2px
+    classDef green fill:#99FF99,stroke:#333,stroke-width:2px
+    classDef purple fill:#CC99FF,stroke:#333,stroke-width:2px
+    classDef orange fill:#FFCC99,stroke:#333,stroke-width:2px
+    classDef red fill:#FF9999,stroke:#333,stroke-width:2px
+    classDef gray fill:#CCCCCC,stroke:#333,stroke-width:2px
+
+    class User yellow
+    class BookRoom blue
+    class MeetingRoom,CreateTimeSlot,CreateBooking green
+    class ValidateTimeSlot,ValidateAttendees purple
+    class BookingCreated orange
+    class TimeSlotError,AttendeesError red
+    class BookingList gray

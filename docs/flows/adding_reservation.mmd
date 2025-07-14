@@ -1,0 +1,17 @@
+sequenceDiagram
+    actor User
+
+    %% Flow 1: Adding a Reservation
+    User->>+MeetingRoom: book(startTime, endTime, booker, numberOfAttendees)
+    MeetingRoom->>MeetingRoom: Validate time slot (no overlap)
+    MeetingRoom->>MeetingRoom: Validate numberOfAttendees (4 ≤ attendees ≤ 20)
+    alt Time slot free and attendees valid
+        MeetingRoom->>TimeSlot: Create TimeSlot(startTime, endTime)
+        TimeSlot-->>MeetingRoom: TimeSlot
+        MeetingRoom->>Booking: Create Booking(bookingId, timeSlot, booker, numberOfAttendees)
+        Booking-->>MeetingRoom: Booking
+        MeetingRoom->>MeetingRoom: Add Booking to bookings list
+        MeetingRoom-->>User: Booking confirmed
+    else Time slot conflict or invalid attendees
+        MeetingRoom-->>User: Error: Invalid time slot or attendees
+    end

@@ -1,0 +1,33 @@
+flowchart LR
+    %% Actor
+    User[User<br>Actor]
+
+    %% Flow 2: Canceling a Reservation
+    User -->|issues| CancelBooking[CancelBooking<br>Command]
+    CancelBooking --> MeetingRoom
+    MeetingRoom -->|checks| ValidateBookingExists[CheckBookingExists<br>Policy]
+    subgraph Canceling Reservation
+        ValidateBookingExists -->|valid| RemoveBooking[Remove Booking]
+        RemoveBooking --> BookingCanceled[BookingCanceled<br>Event]
+        BookingCanceled -->|updates| MeetingRoom
+        ValidateBookingExists -->|invalid| BookingNotFound[BookingNotFound<br>Error]
+        BookingCanceled --> User
+        BookingNotFound --> User
+    end
+
+    %% Styling to mimic Event Storming colors
+    classDef yellow fill:#FFFF99,stroke:#333,stroke-width:2px
+    classDef blue fill:#99CCFF,stroke:#333,stroke-width:2px
+    classDef green fill:#99FF99,stroke:#333,stroke-width:2px
+    classDef purple fill:#CC99FF,stroke:#333,stroke-width:2px
+    classDef orange fill:#FFCC99,stroke:#333,stroke-width:2px
+    classDef red fill:#FF9999,stroke:#333,stroke-width:2px
+    classDef gray fill:#CCCCCC,stroke:#333,stroke-width:2px
+
+    class User yellow
+    class BookRoom,CancelBooking,ListBookings blue
+    class MeetingRoom,CreateTimeSlot,CreateBooking,RemoveBooking green
+    class ValidateTimeSlot,ValidateAttendees,ValidateBookingExists purple
+    class BookingCreated,BookingCanceled,BookingsListed orange
+    class TimeSlotError,AttendeesError,BookingNotFound red
+    class BookingList gray

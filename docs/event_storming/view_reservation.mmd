@@ -1,0 +1,25 @@
+flowchart LR
+    %% Actor
+    User[User<br>Actor]
+
+    %% Flow 3: Viewing Reservations
+    User -->|issues| ListBookings[ListBookings<br>Command]
+    ListBookings --> MeetingRoom
+    MeetingRoom -->|retrieves| BookingList[BookingList<br>Read Model]
+    subgraph Viewing Reservations
+        BookingList --> BookingsListed[BookingsListed<br>Event]
+        BookingsListed --> User
+    end
+
+    %% Styling to mimic Event Storming colors
+    classDef yellow fill:#FFFF99,stroke:#333,stroke-width:2px
+    classDef blue fill:#99CCFF,stroke:#333,stroke-width:2px
+    classDef green fill:#99FF99,stroke:#333,stroke-width:2px
+    classDef orange fill:#FFCC99,stroke:#333,stroke-width:2px
+    classDef gray fill:#CCCCCC,stroke:#333,stroke-width:2px
+
+    class User yellow
+    class BookRoom,ListBookings blue
+    class MeetingRoom green
+    class BookingsListed orange
+    class BookingList gray

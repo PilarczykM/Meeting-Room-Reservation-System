@@ -1,0 +1,25 @@
+classDiagram
+    class MeetingRoom {
+        -String roomId
+        -String roomName
+        -int maxCapacity = 20
+        -List~Booking~ bookings
+        +book(startTime: DateTime, endTime: DateTime, booker: String, numberOfAttendees: int) Booking
+        +cancel(bookingId: String) void
+        +listBookings() List~Booking~
+    }
+
+    class Booking {
+        -String bookingId
+        -TimeSlot timeSlot
+        -String booker
+        -int numberOfAttendees
+    }
+
+    class TimeSlot {
+        -DateTime startTime
+        -DateTime endTime
+    }
+
+    MeetingRoom "1" --> "*" Booking : contains
+    Booking "1" --> "1" TimeSlot : has
