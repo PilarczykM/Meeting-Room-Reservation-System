@@ -12,6 +12,11 @@ class TimeSlot(BaseModel):
     start_time: datetime = Field(..., description="The start time of the time slot.")
     end_time: datetime = Field(..., description="The end time of the time slot.")
 
+    @classmethod
+    def create(cls, start_time: str, end_time: str) -> Self:
+        """Create a TimeSlot instance from string representations of start and end times."""
+        return cls(start_time=datetime.fromisoformat(start_time), end_time=datetime.fromisoformat(end_time)).to_utc()
+
     @model_validator(mode="after")
     def validate_times(self) -> Self:
         """Validate that the end time is after the start time."""
