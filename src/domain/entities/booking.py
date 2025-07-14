@@ -4,6 +4,7 @@ from typing import Self
 from pydantic import BaseModel, Field, model_validator
 
 from src.domain.entities.timeslot import TimeSlot
+from src.domain.exceptions import InvalidAttendeeCountError
 
 
 class Booking(BaseModel):
@@ -18,7 +19,7 @@ class Booking(BaseModel):
     def validate_attendees(self) -> Self:
         """Validate that the number of attendees is within the allowed range."""
         if not (4 <= self.attendees <= 20):
-            raise ValueError("Number of attendees must be between 4 and 20 (inclusive).")
+            raise InvalidAttendeeCountError()
         return self
 
     def __eq__(self, other: object) -> bool:

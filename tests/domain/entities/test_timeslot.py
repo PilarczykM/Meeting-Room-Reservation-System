@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 import pytest
 
 from src.domain.entities.timeslot import TimeSlot
+from src.domain.exceptions import InvalidTimeSlotError
 
 
 def test_timeslot_creation_valid():
@@ -16,14 +17,14 @@ def test_timeslot_creation_valid():
 def test_timeslot_creation_invalid_end_before_start():
     start = datetime(2024, 7, 14, 10, 0, 0)
     end = datetime(2024, 7, 14, 9, 0, 0)
-    with pytest.raises(ValueError, match="End time must be after start time."):
+    with pytest.raises(InvalidTimeSlotError):
         TimeSlot(start_time=start, end_time=end)
 
 
 def test_timeslot_creation_invalid_end_equals_start():
     start = datetime(2024, 7, 14, 9, 0, 0)
     end = datetime(2024, 7, 14, 9, 0, 0)
-    with pytest.raises(ValueError, match="End time must be after start time."):
+    with pytest.raises(InvalidTimeSlotError):
         TimeSlot(start_time=start, end_time=end)
 
 
