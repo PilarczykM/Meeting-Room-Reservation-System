@@ -4,6 +4,7 @@ import pytest
 
 from src.domain.entities.booking import Booking
 from src.domain.entities.timeslot import TimeSlot
+from src.domain.exceptions import InvalidAttendeeCountError
 
 
 @pytest.fixture
@@ -32,8 +33,8 @@ def test_booking_id_is_frozen(sample_timeslot):
 @pytest.mark.parametrize(
     "attendees, expected_exception",
     [
-        (3, ValueError),  # Below min
-        (21, ValueError),  # Above max
+        (3, InvalidAttendeeCountError),  # Below min
+        (21, InvalidAttendeeCountError),  # Above max
         (4, None),  # Min valid
         (20, None),  # Max valid
         (10, None),  # Mid valid
