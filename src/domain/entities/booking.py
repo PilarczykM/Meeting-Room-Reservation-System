@@ -15,6 +15,11 @@ class Booking(BaseModel):
     booker: str = Field(..., description="The name or ID of the person booking.")
     attendees: int = Field(..., description="The number of attendees for the meeting.")
 
+    @classmethod
+    def create(cls, time_slot: TimeSlot, booker: str, attendees: int) -> Self:
+        """Create a Booking instance."""
+        return cls(time_slot=time_slot, booker=booker, attendees=attendees)
+
     @model_validator(mode="after")
     def validate_attendees(self) -> Self:
         """Validate that the number of attendees is within the allowed range."""
