@@ -52,19 +52,19 @@
 **Branch**: `feature/meeting-room-aggregate`
 **Reference**: `{ROOT}/docs/PRD.md Section 6`, {ROOT}/docs/event_storming/_meeting_room_event_storming.mmd (all sequence diagrams), {ROOT}/docs/domain_class_model.mmd
 
-- [ ] Create MeetingRoom aggregate root in domain/aggregates/
-- [ ] Implement room capacity constant (20 people)
-- [ ] Add bookings collection management
-- [ ] Implement book() method with overlap validation
-- [ ] Implement cancel() method with booking lookup
-- [ ] Implement list_bookings() method
-- [ ] Add private validation methods for business rules
-- [ ] Ensure aggregate maintains consistency
-- [ ] **Tests**: Write comprehensive unit tests for all MeetingRoom methods
-- [ ] **Tests**: Test business rule enforcement (overlaps, attendee limits)
-- [ ] **Tests**: Test aggregate state consistency
-- [ ] **Acceptance Criteria**: MeetingRoom enforces all business rules and maintains data integrity
-- [ ] **Commit**
+- [x] Create MeetingRoom aggregate root in domain/aggregates/
+- [x] Implement room capacity constant (20 people)
+- [x] Add bookings collection management
+- [x] Implement book() method with overlap validation
+- [x] Implement cancel() method with booking lookup
+- [x] Implement list_bookings() method
+- [x] Add private validation methods for business rules
+- [x] Ensure aggregate maintains consistency
+- [x] **Tests**: Write comprehensive unit tests for all MeetingRoom methods
+- [x] **Tests**: Test business rule enforcement (overlaps, attendee limits)
+- [x] **Tests**: Test aggregate state consistency
+- [x] **Acceptance Criteria**: MeetingRoom enforces all business rules and maintains data integrity
+- [x] **Commit**
 
 ## Git Workflow Guidelines
 
