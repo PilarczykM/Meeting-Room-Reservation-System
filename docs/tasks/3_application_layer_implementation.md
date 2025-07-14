@@ -4,17 +4,17 @@
 **Branch**: `feature/booking-service`
 **Reference**: `{ROOT}/docs/PRD.md Section 3.1`, {ROOT}/docs/event_storming/_meeting_room_event_storming.mmd (booking flow)
 
-- [ ] Create application/services/booking_service.py
-- [ ] Implement BookingService class with dependency injection
-- [ ] Add create_booking() method coordinating domain operations
-- [ ] Implement proper error handling and exception translation
-- [ ] Add logging for audit trail
-- [ ] Implement transaction-like behavior for consistency
-- [ ] **Tests**: Write unit tests mocking repository dependencies
-- [ ] **Tests**: Test error handling and exception translation
-- [ ] **Tests**: Test successful booking creation flow
-- [ ] **Acceptance Criteria**: BookingService coordinates domain operations correctly
-- [ ] **Commit**
+- [x] Create application/services/booking_service.py
+- [x] Implement BookingService class with dependency injection
+- [x] Add create_booking() method coordinating domain operations
+- [x] Implement proper error handling and exception translation
+- [x] Add logging for audit trail
+- [x] Implement transaction-like behavior for consistency
+- [x] **Tests**: Write unit tests mocking repository dependencies
+- [x] **Tests**: Test error handling and exception translation
+- [x] **Tests**: Test successful booking creation flow
+- [x] **Acceptance Criteria**: BookingService coordinates domain operations correctly
+- [x] **Commit**
 
 ### 3.2 Application Services - Cancellation Service
 **Branch**: `feature/cancellation-service`
