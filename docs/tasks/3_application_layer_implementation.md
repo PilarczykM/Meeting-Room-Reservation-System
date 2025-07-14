@@ -36,17 +36,17 @@
 **Branch**: `feature/query-service`
 **Reference**: `{ROOT}/docs/PRD.md Section 3.1`, {ROOT}/docs/event_storming/_meeting_room_event_storming.mmd (list bookings flow)
 
-- [ ] Create application/services/query_service.py
-- [ ] Implement QueryService class for read operations
-- [ ] Add get_all_bookings() method
-- [ ] Implement booking formatting for display
+- [x] Create application/services/query_service.py
+- [x] Implement QueryService class for read operations
+- [x] Add get_all_bookings() method
+- [x] Implement booking formatting for display
 - [ ] Add sorting and filtering capabilities
 - [ ] Consider future pagination requirements
-- [ ] **Tests**: Write unit tests for query operations
-- [ ] **Tests**: Test booking formatting and display
-- [ ] **Tests**: Test empty booking list handling
-- [ ] **Acceptance Criteria**: QueryService provides formatted booking information
-- [ ] **Commit**
+- [x] **Tests**: Write unit tests for query operations
+- [x] **Tests**: Test booking formatting and display
+- [x] **Tests**: Test empty booking list handling
+- [x] **Acceptance Criteria**: QueryService provides formatted booking information
+- [x] **Commit**
 
 ### 3.4 Application DTOs and Commands
 **Branch**: `feature/application-dtos`
