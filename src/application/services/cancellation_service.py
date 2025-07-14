@@ -1,5 +1,6 @@
 import logging
 
+from src.application.commands.commands import CancelBookingCommand
 from src.application.exceptions import CancellationFailedError
 
 logger = logging.getLogger(__name__)
@@ -11,8 +12,9 @@ class CancellationService:
     def __init__(self, booking_repository):
         self.booking_repository = booking_repository
 
-    def cancel_booking(self, booking_id: str):
+    def cancel_booking(self, command: CancelBookingCommand):
         """Cancel an existing booking by its ID."""
+        booking_id = command.request.booking_id
         logger.info(f"Attempting to cancel booking with ID: {booking_id}")
         booking = self.booking_repository.get_by_id(booking_id)
         if not booking:
