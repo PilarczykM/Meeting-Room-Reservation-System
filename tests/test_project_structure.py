@@ -10,9 +10,7 @@ def test_project_structure():
     expected_dirs = ["src/domain", "src/application", "src/infrastructure", "tests"]
 
     # When
-    missing_dirs = [
-        d for d in expected_dirs if not os.path.isdir(os.path.join(root_dir, d))
-    ]
+    missing_dirs = [d for d in expected_dirs if not os.path.isdir(os.path.join(root_dir, d))]
 
     # Then
     assert not missing_dirs, f"Missing directories: {', '.join(missing_dirs)}"

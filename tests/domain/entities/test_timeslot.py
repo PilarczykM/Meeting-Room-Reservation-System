@@ -55,9 +55,7 @@ def test_timeslot_creation_invalid_end_equals_start():
         ("09:00", "10:00", "08:00", "11:00", True),  # ts1 fully within ts2 (larger)
     ],
 )
-def test_timeslot_overlaps_with(
-    ts1_start, ts1_end, ts2_start, ts2_end, expected_overlap, parse_time
-):
+def test_timeslot_overlaps_with(ts1_start, ts1_end, ts2_start, ts2_end, expected_overlap, parse_time):
     ts1 = TimeSlot(start_time=parse_time(ts1_start), end_time=parse_time(ts1_end))
     ts2 = TimeSlot(start_time=parse_time(ts2_start), end_time=parse_time(ts2_end))
 
