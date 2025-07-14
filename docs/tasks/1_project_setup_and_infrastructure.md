@@ -32,16 +32,16 @@
 **Branch**: `feature/github-workflow`
 **Reference**: `{ROOT}/docs/PRD.md Section 4`
 
-- [ ] Create .github/workflows/ci.yml
-- [ ] Configure Python version matrix (3.11+)
-- [ ] Set up automated testing on push/PR
-- [ ] Add code formatting check with ruff
-- [ ] Add linting check with ruff
-- [ ] Configure test coverage reporting
-- [ ] Set up automated dependency security scanning
-- [ ] **Tests**: Test workflow configuration locally
-- [ ] **Acceptance Criteria**: CI pipeline runs successfully on GitHub
-- [ ] **Commit**
+- [x] Create .github/workflows/ci.yml
+- [x] Configure Python version matrix (3.11+)
+- [x] Set up automated testing on push/PR
+- [x] Add code formatting check with ruff
+- [x] Add linting check with ruff
+- [x] Configure test coverage reporting
+- [x] Set up automated dependency security scanning
+- [x] **Tests**: Test workflow configuration locally
+- [x] **Acceptance Criteria**: CI pipeline runs successfully on GitHub
+- [x] **Commit**
 
 ## Git Workflow Guidelines
 
