@@ -1,6 +1,6 @@
 import logging
 
-from src.domain.exceptions import BookingNotFoundError
+from src.application.exceptions import CancellationFailedError
 
 logger = logging.getLogger(__name__)
 
@@ -17,6 +17,10 @@ class CancellationService:
         booking = self.booking_repository.get_by_id(booking_id)
         if not booking:
             logger.warning(f"Booking with ID {booking_id} not found for cancellation.")
-            raise BookingNotFoundError(f"Booking with ID {booking_id} not found.")
-        self.booking_repository.delete(booking_id)
-        logger.info(f"Booking with ID {booking_id} cancelled successfully.")
+            raise CancellationFailedError(f"Cancellation failed: Booking with ID {booking_id} not found.")
+        try:
+            self.booking_repository.delete(booking_id)
+            logger.info(f"Booking with ID {booking_id} cancelled successfully.")
+        except Exception as e:
+            logger.exception("Failed to cancel booking")
+            raise CancellationFailedError(f"Cancellation failed: {e}") from e

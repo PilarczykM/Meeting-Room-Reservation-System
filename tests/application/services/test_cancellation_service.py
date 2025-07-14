@@ -2,10 +2,10 @@ from unittest.mock import MagicMock
 
 import pytest
 
+from src.application.exceptions import CancellationFailedError
 from src.application.services.cancellation_service import CancellationService
 from src.domain.entities.booking import Booking
 from src.domain.entities.timeslot import TimeSlot
-from src.domain.exceptions import BookingNotFoundError
 
 
 @pytest.fixture
@@ -36,5 +36,5 @@ def test_cancel_booking_not_found_error(cancellation_service):
     cancellation_service.booking_repository.get_by_id.return_value = None
 
     # Act & Assert
-    with pytest.raises(BookingNotFoundError):
+    with pytest.raises(CancellationFailedError):
         cancellation_service.cancel_booking(booking_id)
