@@ -36,17 +36,17 @@
 **Branch**: `feature/domain-exceptions`
 **Reference**: `{ROOT}/docs/PRD.md Section 5`, {ROOT}/docs/event_storming/_meeting_room_event_storming.mmd (error handling in diagrams)
 
-- [ ] Create domain/exceptions.py module
-- [ ] Implement OverlappingBookingError exception
-- [ ] Implement InvalidAttendeeCountError exception
-- [ ] Implement BookingNotFoundError exception
-- [ ] Implement InvalidTimeSlotError exception
-- [ ] Add descriptive error messages for each exception
-- [ ] Create base DomainError class
-- [ ] **Tests**: Test exception creation and message formatting
-- [ ] **Tests**: Test exception inheritance hierarchy
-- [ ] **Acceptance Criteria**: All domain exceptions provide clear error messages
-- [ ] **Commit**
+- [x] Create domain/exceptions.py module
+- [x] Implement OverlappingBookingError exception
+- [x] Implement InvalidAttendeeCountError exception
+- [x] Implement BookingNotFoundError exception
+- [x] Implement InvalidTimeSlotError exception
+- [x] Add descriptive error messages for each exception
+- [x] Create base DomainError class
+- [x] **Tests**: Test exception creation and message formatting
+- [x] **Tests**: Test exception inheritance hierarchy
+- [x] **Acceptance Criteria**: All domain exceptions provide clear error messages
+- [x] **Commit**
 
 ### 2.4 Meeting Room Aggregate Root
 **Branch**: `feature/meeting-room-aggregate`

@@ -3,6 +3,8 @@ from typing import Self
 
 from pydantic import BaseModel, Field, model_validator
 
+from src.domain.exceptions import InvalidTimeSlotError
+
 
 class TimeSlot(BaseModel):
     """Represents a time slot with a start and end time."""
@@ -14,7 +16,7 @@ class TimeSlot(BaseModel):
     def validate_times(self) -> Self:
         """Validate that the end time is after the start time."""
         if self.start_time >= self.end_time:
-            raise ValueError("End time must be after start time.")
+            raise InvalidTimeSlotError()
         return self
 
     def overlaps_with(self, other: Self) -> bool:
