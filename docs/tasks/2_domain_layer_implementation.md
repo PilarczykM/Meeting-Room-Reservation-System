@@ -20,17 +20,17 @@
 **Branch**: `feature/booking-entity`
 **Reference**: `{ROOT}/docs/PRD.md Section 6`, {ROOT}/docs/event_storming/_meeting_room_event_storming.mmd (booking sequence diagram), {ROOT}/docs/domain_class_model.mmd
 
-- [ ] Create Booking entity in domain/entities/
-- [ ] Implement Booking with booking_id, time_slot, booker, attendees attributes
-- [ ] Add attendee count validation (4-20 inclusive)
-- [ ] Implement unique booking ID generation
-- [ ] Add booking equality and hash methods
-- [ ] Create booking status tracking if needed
-- [ ] **Tests**: Write unit tests for Booking creation and validation
-- [ ] **Tests**: Test attendee count validation edge cases
-- [ ] **Tests**: Test booking ID uniqueness
-- [ ] **Acceptance Criteria**: Booking entity enforces all business rules correctly
-- [ ] **Commit**
+- [x] Create Booking entity in domain/entities/
+- [x] Implement Booking with booking_id, time_slot, booker, attendees attributes
+- [x] Add attendee count validation (4-20 inclusive)
+- [x] Implement unique booking ID generation
+- [x] Add booking equality and hash methods
+- [x] Create booking status tracking if needed
+- [x] **Tests**: Write unit tests for Booking creation and validation
+- [x] **Tests**: Test attendee count validation edge cases
+- [x] **Tests**: Test booking ID uniqueness
+- [x] **Acceptance Criteria**: Booking entity enforces all business rules correctly
+- [x] **Commit**
 
 ### 2.3 Domain Exceptions
 **Branch**: `feature/domain-exceptions`

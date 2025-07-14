@@ -19,9 +19,7 @@ class TimeSlot(BaseModel):
 
     def overlaps_with(self, other: Self) -> bool:
         """Check if this time slot overlaps with another time slot."""
-        return not (
-            self.end_time <= other.start_time or self.start_time >= other.end_time
-        )
+        return not (self.end_time <= other.start_time or self.start_time >= other.end_time)
 
     def __eq__(self, other: object) -> bool:
         """Compare two TimeSlot objects for equality."""
