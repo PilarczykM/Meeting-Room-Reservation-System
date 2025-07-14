@@ -7,13 +7,6 @@ from src.domain.entities.timeslot import TimeSlot
 from src.domain.exceptions import InvalidAttendeeCountError
 
 
-@pytest.fixture
-def sample_timeslot():
-    start = datetime(2024, 7, 14, 9, 0, 0)
-    end = datetime(2024, 7, 14, 10, 0, 0)
-    return TimeSlot(start_time=start, end_time=end)
-
-
 def test_booking_creation_valid(sample_timeslot):
     booking = Booking(time_slot=sample_timeslot, booker="John Doe", attendees=10)
     assert booking.time_slot == sample_timeslot

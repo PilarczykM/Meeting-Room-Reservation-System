@@ -1,9 +1,6 @@
-from datetime import datetime
-
 import pytest
 
 from src.domain.aggregates.meeting_room import MeetingRoom
-from src.domain.entities.timeslot import TimeSlot
 from src.domain.exceptions import (
     BookingNotFoundError,
     InvalidAttendeeCountError,
@@ -14,30 +11,6 @@ from src.domain.exceptions import (
 @pytest.fixture
 def meeting_room():
     return MeetingRoom()
-
-
-@pytest.fixture
-def time_slot_1():
-    return TimeSlot(
-        start_time=datetime(2024, 7, 14, 9, 0),
-        end_time=datetime(2024, 7, 14, 10, 0),
-    )
-
-
-@pytest.fixture
-def time_slot_2():
-    return TimeSlot(
-        start_time=datetime(2024, 7, 14, 10, 0),
-        end_time=datetime(2024, 7, 14, 11, 0),
-    )
-
-
-@pytest.fixture
-def overlapping_time_slot():
-    return TimeSlot(
-        start_time=datetime(2024, 7, 14, 9, 30),
-        end_time=datetime(2024, 7, 14, 10, 30),
-    )
 
 
 def test_meeting_room_initialization(meeting_room):
