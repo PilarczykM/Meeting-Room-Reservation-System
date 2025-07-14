@@ -1,3 +1,5 @@
+import uuid
+
 from pydantic import BaseModel, Field
 
 from src.domain.entities.booking import Booking
@@ -12,15 +14,14 @@ from src.domain.exceptions import (
 class MeetingRoom(BaseModel):
     """Represents a meeting room aggregate root."""
 
-    ROOM_CAPACITY: int = 20
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    capacity: int = Field(default=20)
     bookings: list[Booking] = Field(default_factory=list)
 
     def book(self, time_slot: TimeSlot, booker: str, attendees: int) -> Booking:
         """Books the meeting room for a given time slot."""
-        if not (4 <= attendees <= self.ROOM_CAPACITY):
-            raise InvalidAttendeeCountError(
-                f"Number of attendees must be between 4 and {self.ROOM_CAPACITY} (inclusive)."
-            )
+        if not (4 <= attendees <= self.capacity):
+            raise InvalidAttendeeCountError(f"Number of attendees must be between 4 and {self.capacity} (inclusive).")
 
         for existing_booking in self.bookings:
             if time_slot.overlaps_with(existing_booking.time_slot):

@@ -19,16 +19,16 @@
 **Branch**: `feature/in-memory-repository`
 **Reference**: `{ROOT}/docs/PRD.md Section 4` (infrastructure requirements)
 
-- [ ] Create infrastructure/repositories/in_memory_repository.py
-- [ ] Implement InMemoryMeetingRoomRepository class
-- [ ] Add thread-safe data storage using appropriate data structures
-- [ ] Implement all repository interface methods
-- [ ] Add data persistence simulation
-- [ ] Handle concurrent access scenarios
-- [ ] **Tests**: Write comprehensive repository tests
-- [ ] **Tests**: Test thread safety and concurrent access
-- [ ] **Tests**: Test all CRUD operations
-- [ ] **Acceptance Criteria**: Repository handles all data operations correctly
+- [x] Create infrastructure/repositories/in_memory_repository.py
+- [x] Implement InMemoryMeetingRoomRepository class
+- [x] Add thread-safe data storage using appropriate data structures
+- [x] Implement all repository interface methods
+- [x] Add data persistence simulation
+- [x] Handle concurrent access scenarios
+- [x] **Tests**: Write comprehensive repository tests
+- [x] **Tests**: Test thread safety and concurrent access
+- [x] **Tests**: Test all CRUD operations
+- [x] **Acceptance Criteria**: Repository handles all data operations correctly
 - [ ] **Commit**
 
 ### 4.3 CLI Interface Foundation
