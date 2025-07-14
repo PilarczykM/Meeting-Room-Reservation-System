@@ -19,14 +19,14 @@
 **Branch**: `feature/dev-environment`
 **Reference**: `{ROOT}/docs/PRD.md Section 4`
 
-- [ ] Configure ruff for code formatting and linting
-- [ ] Set up pre-commit hooks for code quality
-- [ ] Configure ruff settings in pyproject.toml
-- [ ] Configure pytest settings in pyproject.toml
-- [ ] Create Makefile for common development tasks
-- [ ] **Tests**: Test linting and formatting rules
-- [ ] **Acceptance Criteria**: Code formatting and linting work automatically
-- [ ] **Commit**
+- [x] Configure ruff for code formatting and linting
+- [x] Set up pre-commit hooks for code quality
+- [x] Configure ruff settings in pyproject.toml
+- [x] Configure pytest settings in pyproject.toml
+- [x] Create Makefile for common development tasks
+- [x] **Tests**: Test linting and formatting rules
+- [x] **Acceptance Criteria**: Code formatting and linting work automatically
+- [x] **Commit**
 
 ### 1.3 GitHub CI/CD Pipeline
 **Branch**: `feature/github-workflow`
