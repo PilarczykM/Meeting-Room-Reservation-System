@@ -4,17 +4,17 @@
 **Branch**: `feature/timeslot-entity`
 **Reference**: `{ROOT}/docs/PRD.md Section 6`, {ROOT}/docs/event_storming/_meeting_room_event_storming.mmd (booking sequence diagram), {ROOT}/docs/domain_class_model.mmd
 
-- [ ] Create TimeSlot value object in domain/entities/
-- [ ] Implement TimeSlot with start_time and end_time attributes
-- [ ] Add validation for time slot consistency (start < end)
-- [ ] Implement overlap detection method
-- [ ] Add timezone handling considerations
-- [ ] Create TimeSlot equality and comparison methods
-- [ ] **Tests**: Write comprehensive unit tests for TimeSlot validation
-- [ ] **Tests**: Test overlap detection with various scenarios
-- [ ] **Tests**: Test edge cases (same start/end, midnight boundary)
-- [ ] **Acceptance Criteria**: TimeSlot validates time ranges and detects overlaps correctly
-- [ ] **Commit**
+- [x] Create TimeSlot value object in domain/entities/
+- [x] Implement TimeSlot with start_time and end_time attributes
+- [x] Add validation for time slot consistency (start < end)
+- [x] Implement overlap detection method
+- [x] Add timezone handling considerations
+- [x] Create TimeSlot equality and comparison methods
+- [x] **Tests**: Write comprehensive unit tests for TimeSlot validation
+- [x] **Tests**: Test overlap detection with various scenarios
+- [x] **Tests**: Test edge cases (same start/end, midnight boundary)
+- [x] **Acceptance Criteria**: TimeSlot validates time ranges and detects overlaps correctly
+- [x] **Commit**
 
 ### 2.2 Core Domain Entities - Booking
 **Branch**: `feature/booking-entity`
