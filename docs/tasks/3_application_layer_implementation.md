@@ -20,17 +20,17 @@
 **Branch**: `feature/cancellation-service`
 **Reference**: `{ROOT}/docs/PRD.md Section 3.1`, {ROOT}/docs/event_storming/_meeting_room_event_storming.mmd (cancellation flow)
 
-- [ ] Create application/services/cancellation_service.py
-- [ ] Implement CancellationService class
-- [ ] Add cancel_booking() method with validation
-- [ ] Implement booking existence verification
-- [ ] Add proper error handling for not found cases
-- [ ] Implement audit logging for cancellations
-- [ ] **Tests**: Write unit tests for cancellation scenarios
-- [ ] **Tests**: Test booking not found error handling
-- [ ] **Tests**: Test successful cancellation flow
-- [ ] **Acceptance Criteria**: CancellationService handles all cancellation cases correctly
-- [ ] **Commit**
+- [x] Create application/services/cancellation_service.py
+- [x] Implement CancellationService class
+- [x] Add cancel_booking() method with validation
+- [x] Implement booking existence verification
+- [x] Add proper error handling for not found cases
+- [x] Implement audit logging for cancellations
+- [x] **Tests**: Write unit tests for cancellation scenarios
+- [x] **Tests**: Test booking not found error handling
+- [x] **Tests**: Test successful cancellation flow
+- [x] **Acceptance Criteria**: CancellationService handles all cancellation cases correctly
+- [x] **Commit**
 
 ### 3.3 Application Services - Query Service
 **Branch**: `feature/query-service`
