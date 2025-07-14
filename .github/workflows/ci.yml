@@ -17,9 +17,10 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: uv sync
-    - name: Run tests
-      run: uv run pytest
     - name: Run ruff checks (linting and formatting)
       run: |
         uv run ruff check .
         uv run ruff format . --check
+    - name: Run tests
+      if: success()
+      run: uv run pytest
