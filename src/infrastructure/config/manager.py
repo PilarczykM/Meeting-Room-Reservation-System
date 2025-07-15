@@ -7,7 +7,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from .models import ApplicationConfig, Environment
+from src.infrastructure.config.models import ApplicationConfig, Environment
 
 
 class ConfigurationError(Exception):

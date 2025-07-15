@@ -3,11 +3,11 @@
 import logging
 from typing import Any
 
-from .cli.app import CLIApp
-from .config.manager import ConfigurationError, ConfigurationManager
-from .config.models import ApplicationConfig, Environment
-from .container import ServiceContainer
-from .service_configurator import ServiceConfigurator
+from src.infrastructure.cli.app import CLIApp
+from src.infrastructure.config.manager import ConfigurationError, ConfigurationManager
+from src.infrastructure.config.models import ApplicationConfig, Environment
+from src.infrastructure.container import ServiceContainer
+from src.infrastructure.service_configurator import ServiceConfigurator
 
 
 class ApplicationError(Exception):
