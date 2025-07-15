@@ -94,13 +94,15 @@ class ConfigurationManager:
 
         try:
             # Re-validate using Pydantic
-            config.dict()
+            config.model_dump()
 
             # Additional business logic validation
             _validate_production_config()
 
         except Exception as e:
-            raise ConfigurationError(f"Configuration validation failed: {e}", details={"config": config.dict()}) from e
+            raise ConfigurationError(
+                f"Configuration validation failed: {e}", details={"config": config.model_dump()}
+            ) from e
 
     def _load_default_config(self) -> dict[str, Any]:
         """Load default configuration values."""

@@ -153,7 +153,6 @@ class TestConfigurationManager:
         """Test validation warning for DEBUG logging in production."""
         manager = ConfigurationManager()
         config = ApplicationConfig(environment=Environment.PRODUCTION, log_level=LogLevel.DEBUG)
-
         with pytest.raises(ConfigurationError) as exc_info:
             manager.validate_config(config)
 

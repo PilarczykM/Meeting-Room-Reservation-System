@@ -229,7 +229,7 @@ class RetryHandler:
                         extra={"context": context or {}},
                     )
                 else:
-                    logger.exception(
+                    logger.exceptiontest_validate_config_production_debug_warning(
                         "Operation failed after %d attempts: %s",
                         max_attempts,
                         extra={"context": context or {}},
