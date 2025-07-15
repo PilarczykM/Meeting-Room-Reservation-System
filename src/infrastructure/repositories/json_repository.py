@@ -137,29 +137,75 @@ class JsonMeetingRoomRepository(MeetingRoomRepository):
 
         If a room with the same ID already exists, it will be updated.
         """
-        # TODO: Implement save method
-        pass
+        with self._lock:
+            # Save to file
+            self._save_to_file(meeting_room)
+            # Update cache
+            self._cache[meeting_room.id] = meeting_room
 
     def find_by_id(self, room_id: str) -> MeetingRoom | None:
         """Find a MeetingRoom aggregate by its ID.
 
         Returns the MeetingRoom if found, otherwise None.
         """
-        # TODO: Implement find_by_id method
-        return None
+        with self._lock:
+            # Check cache first
+            if room_id in self._cache:
+                return self._cache[room_id]
+
+            # Load from file
+            meeting_room = self._load_from_file(room_id)
+            if meeting_room is not None:
+                # Cache the loaded room
+                self._cache[room_id] = meeting_room
+
+            return meeting_room
 
     def find_all(self) -> list[MeetingRoom]:
         """Retrieve all MeetingRoom aggregates from JSON storage.
 
         Returns a list of all stored MeetingRoom objects.
         """
-        # TODO: Implement find_all method
-        return []
+        with self._lock:
+            # Get all JSON files in storage directory
+            all_rooms = []
+
+            if not os.path.exists(self._storage_path):
+                return all_rooms
+
+            for filename in os.listdir(self._storage_path):
+                if filename.endswith(".json"):
+                    room_id = filename[:-5]  # Remove .json extension
+
+                    # Check cache first
+                    if room_id in self._cache:
+                        all_rooms.append(self._cache[room_id])
+                    else:
+                        # Load from file
+                        meeting_room = self._load_from_file(room_id)
+                        if meeting_room is not None:
+                            # Cache the loaded room
+                            self._cache[room_id] = meeting_room
+                            all_rooms.append(meeting_room)
+
+            return all_rooms
 
     def delete(self, room_id: str) -> None:
         """Delete a MeetingRoom aggregate by its ID from JSON storage.
 
         If the room does not exist, no action is taken.
         """
-        # TODO: Implement delete method
-        pass
+        with self._lock:
+            file_path = self._get_file_path(room_id)
+
+            # Remove from cache
+            if room_id in self._cache:
+                del self._cache[room_id]
+
+            # Remove file if it exists
+            if os.path.exists(file_path):
+                try:
+                    os.unlink(file_path)
+                except OSError:
+                    # Ignore errors when deleting (file might be locked, etc.)
+                    pass

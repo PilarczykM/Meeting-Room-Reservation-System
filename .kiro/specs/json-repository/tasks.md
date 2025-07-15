@@ -18,14 +18,14 @@
   - Write unit tests for repository initialization and directory creation
   - _Requirements: 2.1, 3.4, 5.1_
 
-- [-] 4. Implement JSON serialization and file I/O operations
+- [x] 4. Implement JSON serialization and file I/O operations
   - Add private methods for loading and saving MeetingRoom objects to/from JSON files
   - Implement atomic write pattern using temporary files
   - Add proper error handling for file operations with custom exceptions
   - Write unit tests for serialization, deserialization, and atomic writes
   - _Requirements: 1.2, 1.3, 3.1, 3.2, 3.3_
 
-- [ ] 5. Implement repository CRUD operations
+- [-] 5. Implement repository CRUD operations
   - Implement save() method with immediate persistence and thread safety
   - Implement find_by_id() method with file loading and caching
   - Implement find_all() method to load all meeting rooms from storage directory
