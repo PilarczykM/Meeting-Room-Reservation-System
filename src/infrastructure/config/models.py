@@ -29,6 +29,20 @@ class RepositoryType(str, Enum):
     IN_MEMORY = "in_memory"
 
 
+class StorageType(str, Enum):
+    """Supported storage implementations."""
+
+    JSON = "json"
+    IN_MEMORY = "in_memory"
+
+
+class StorageConfig(BaseModel):
+    """Storage configuration settings."""
+
+    type: StorageType = StorageType.JSON
+    path: str = "data/meeting_rooms"
+
+
 class LoggingConfig(BaseModel):
     """Logging configuration settings."""
 
@@ -52,12 +66,23 @@ class ApplicationConfig(BaseModel):
     log_level: LogLevel = LogLevel.INFO
     log_format: str = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     repository_type: RepositoryType = RepositoryType.IN_MEMORY
+    storage: StorageConfig = Field(default_factory=StorageConfig)
     logging: LoggingConfig = Field(default_factory=LoggingConfig)
 
     model_config = ConfigDict(
         use_enum_values=True,
         validate_assignment=True,
     )
+
+    @field_validator("storage", mode="before")
+    @classmethod
+    def set_storage_config(cls, v):
+        """Ensure storage config is properly initialized."""
+        if isinstance(v, dict):
+            v = StorageConfig(**v)
+        elif v is None:
+            v = StorageConfig()
+        return v
 
     @field_validator("logging", mode="before")
     @classmethod
