@@ -5,13 +5,13 @@
   - Write unit tests for exception classes
   - _Requirements: 3.2, 3.3_
 
-- [-] 2. Extend configuration models to support storage settings
+- [x] 2. Extend configuration models to support storage settings
   - Add StorageConfig model to infrastructure config models
   - Update AppConfig to include storage configuration
   - Write unit tests for new configuration models
   - _Requirements: 4.1, 4.2, 4.3, 4.4_
 
-- [ ] 3. Implement core JSON repository class with basic structure
+- [-] 3. Implement core JSON repository class with basic structure
   - Create JsonMeetingRoomRepository class implementing MeetingRoomRepository interface
   - Implement constructor with storage path parameter and directory creation
   - Add thread-safe locking mechanism using RLock
