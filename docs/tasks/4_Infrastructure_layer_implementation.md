@@ -60,39 +60,39 @@
 - [x] **Tests**: Test error handling and user feedback
 - [x] **Tests**: Test input validation scenarios
 - [x] **Acceptance Criteria**: Users can easily book rooms through CLI
-- [ ] **Commit**
+- [x] **Commit**
 
 ### 4.5 CLI Commands - Cancellation Command
 **Branch**: `feature/cli-cancellation-command`
 **Reference**: `{ROOT}/docs/PRD.md Section 3.1.2`, {ROOT}/docs/event_storming/_meeting_room_event_storming.mmd (cancellation sequence)
 
-- [ ] Create infrastructure/cli/commands/cancellation_command.py
-- [ ] Implement booking ID input with validation
-- [ ] Add booking lookup and confirmation display
-- [ ] Implement cancellation confirmation prompt
-- [ ] Add success and error message handling
-- [ ] Provide helpful error messages for invalid booking IDs
-- [ ] **Tests**: Test cancellation command with valid/invalid IDs
-- [ ] **Tests**: Test confirmation flow and user experience
-- [ ] **Tests**: Test error scenarios and messages
-- [ ] **Acceptance Criteria**: Users can easily cancel bookings through CLI
-- [ ] **Commit**
+- [x] Create infrastructure/cli/commands/cancellation_command.py
+- [x] Implement booking ID input with validation
+- [x] Add booking lookup and confirmation display
+- [x] Implement cancellation confirmation prompt
+- [x] Add success and error message handling
+- [x] Provide helpful error messages for invalid booking IDs
+- [x] **Tests**: Test cancellation command with valid/invalid IDs
+- [x] **Tests**: Test confirmation flow and user experience
+- [x] **Tests**: Test error scenarios and messages
+- [x] **Acceptance Criteria**: Users can easily cancel bookings through CLI
+- [x] **Commit**
 
 ### 4.6 CLI Commands - List Bookings Command
 **Branch**: `feature/cli-list-command`
 **Reference**: `{ROOT}/docs/PRD.md Section 3.1.3`, {ROOT}/docs/event_storming/_meeting_room_event_storming.mmd (list bookings sequence)
 
-- [ ] Create infrastructure/cli/commands/list_command.py
-- [ ] Implement formatted booking display using rich tables
-- [ ] Add sorting options (by time, booker, etc.)
-- [ ] Implement empty state handling
-- [ ] Add booking count and summary information
-- [ ] Create visually appealing table formatting
-- [ ] **Tests**: Test list command with various booking states
-- [ ] **Tests**: Test table formatting and display
-- [ ] **Tests**: Test empty state and error handling
-- [ ] **Acceptance Criteria**: Users can view all bookings in a clear format
-- [ ] **Commit**
+- [x] Create infrastructure/cli/commands/list_command.py
+- [x] Implement formatted booking display using rich tables
+- [x] Add sorting options (by time, booker, etc.)
+- [x] Implement empty state handling
+- [x] Add booking count and summary information
+- [x] Create visually appealing table formatting
+- [x] **Tests**: Test list command with various booking states
+- [x] **Tests**: Test table formatting and display
+- [x] **Tests**: Test empty state and error handling
+- [x] **Acceptance Criteria**: Users can view all bookings in a clear format
+- [x] **Commit**
 
 ## Git Workflow Guidelines
 
