@@ -122,7 +122,7 @@ class TestBookingCommand:
             "y",  # confirmation
         ]
 
-        mock_booking_service.create_booking.side_effect = OverlappingBookingError("Time slot already booked")
+        mock_booking_service.create_booking.side_effect = OverlappingBookingError()
 
         # Act
         booking_command.execute([])
