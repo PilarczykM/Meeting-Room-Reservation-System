@@ -1,0 +1,11 @@
+{
+  "environment": "test",
+  "log_level": "WARNING",
+  "log_format": "%(levelname)s - %(message)s",
+  "repository_type": "in_memory",
+  "logging": {
+    "level": "WARNING",
+    "format": "%(levelname)s - %(message)s",
+    "handlers": ["console"]
+  }
+}
