@@ -1,12 +1,14 @@
 import logging
 
+from src.domain.repositories.meeting_room_repository import MeetingRoomRepository
+
 logger = logging.getLogger(__name__)
 
 
 class QueryService:
     """Service for handling read operations on bookings."""
 
-    def __init__(self, booking_repository):
+    def __init__(self, booking_repository: MeetingRoomRepository):
         self.booking_repository = booking_repository
 
     def get_all_bookings(self) -> list[dict]:

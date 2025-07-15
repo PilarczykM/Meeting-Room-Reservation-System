@@ -5,6 +5,7 @@ from src.application.dtos.booking_response import BookingResponse
 from src.domain.aggregates.meeting_room import MeetingRoom
 from src.domain.entities.booking import Booking
 from src.domain.entities.timeslot import TimeSlot
+from src.domain.repositories.meeting_room_repository import MeetingRoomRepository
 
 logger = logging.getLogger(__name__)
 
@@ -12,7 +13,7 @@ logger = logging.getLogger(__name__)
 class BookingService:
     """Service for managing booking operations."""
 
-    def __init__(self, booking_repository):
+    def __init__(self, booking_repository: MeetingRoomRepository):
         self.booking_repository = booking_repository
 
     def create_booking(self, command: CreateBookingCommand) -> BookingResponse:
