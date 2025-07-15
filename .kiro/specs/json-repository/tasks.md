@@ -11,14 +11,14 @@
   - Write unit tests for new configuration models
   - _Requirements: 4.1, 4.2, 4.3, 4.4_
 
-- [-] 3. Implement core JSON repository class with basic structure
+- [x] 3. Implement core JSON repository class with basic structure
   - Create JsonMeetingRoomRepository class implementing MeetingRoomRepository interface
   - Implement constructor with storage path parameter and directory creation
   - Add thread-safe locking mechanism using RLock
   - Write unit tests for repository initialization and directory creation
   - _Requirements: 2.1, 3.4, 5.1_
 
-- [ ] 4. Implement JSON serialization and file I/O operations
+- [-] 4. Implement JSON serialization and file I/O operations
   - Add private methods for loading and saving MeetingRoom objects to/from JSON files
   - Implement atomic write pattern using temporary files
   - Add proper error handling for file operations with custom exceptions

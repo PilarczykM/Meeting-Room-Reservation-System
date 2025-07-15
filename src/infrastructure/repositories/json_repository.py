@@ -60,6 +60,78 @@ class JsonMeetingRoomRepository(MeetingRoomRepository):
         """
         return os.path.join(self._storage_path, f"{room_id}.json")
 
+    def _save_to_file(self, meeting_room: MeetingRoom) -> None:
+        """Save a MeetingRoom aggregate to a JSON file using atomic writes.
+
+        Args:
+            meeting_room: The MeetingRoom aggregate to save
+
+        Raises:
+            StorageError: If the file cannot be written
+
+        """
+        import json
+
+        file_path = self._get_file_path(meeting_room.id)
+        temp_path = f"{file_path}.tmp"
+
+        try:
+            # Serialize to JSON using Pydantic's model_dump
+            json_data = meeting_room.model_dump(mode="json")
+
+            # Write to temporary file first (atomic write pattern)
+            with open(temp_path, "w", encoding="utf-8") as f:
+                json.dump(json_data, f, indent=2, ensure_ascii=False)
+
+            # Atomic move to final location
+            os.replace(temp_path, file_path)
+
+        except (OSError, PermissionError) as e:
+            # Clean up temporary file on error
+            if os.path.exists(temp_path):
+                try:
+                    os.unlink(temp_path)
+                except OSError:
+                    pass  # Ignore cleanup errors
+
+            from src.infrastructure.exceptions import StorageError
+
+            raise StorageError(
+                f"Failed to save meeting room to file: {file_path}",
+                details={"room_id": meeting_room.id, "file_path": file_path, "error": str(e)},
+                cause=e,
+            ) from e
+
+    def _load_from_file(self, room_id: str) -> MeetingRoom | None:
+        """Load a MeetingRoom aggregate from a JSON file.
+
+        Args:
+            room_id: The ID of the meeting room to load
+
+        Returns:
+            The MeetingRoom aggregate if found, otherwise None
+
+        """
+        import json
+
+        file_path = self._get_file_path(room_id)
+
+        if not os.path.exists(file_path):
+            return None
+
+        try:
+            with open(file_path, encoding="utf-8") as f:
+                json_data = json.load(f)
+
+            # Deserialize from JSON using Pydantic's model_validate
+            return MeetingRoom.model_validate(json_data)
+
+        except (OSError, PermissionError, json.JSONDecodeError, ValueError) as e:
+            # Log error and return None for corrupted/unreadable files
+            # In a real application, you'd use proper logging here
+            print(f"Warning: Failed to load meeting room {room_id} from {file_path}: {e}")
+            return None
+
     def save(self, meeting_room: MeetingRoom) -> None:
         """Save a MeetingRoom aggregate to JSON storage.
 
