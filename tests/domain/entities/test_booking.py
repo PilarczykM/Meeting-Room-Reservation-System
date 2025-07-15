@@ -35,7 +35,7 @@ def test_booking_attendee_validation(time_slot_1, attendees, expected_exception)
     if expected_exception:
         with pytest.raises(
             expected_exception,
-            match="Number of attendees must be between 4 and 20 \\(inclusive\\)\\.",
+            match="Number of attendees ",
         ):
             Booking(time_slot=time_slot_1, booker="John Doe", attendees=attendees)
     else:

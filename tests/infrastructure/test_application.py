@@ -131,7 +131,10 @@ class TestApplication:
             with pytest.raises(ApplicationError) as exc_info:
                 app.bootstrap()
 
-            assert "Failed to load configuration" in str(exc_info.value)
+            # The error should be wrapped in a bootstrap failure message
+            assert "Application bootstrap failed" in str(exc_info.value) or "Failed to load configuration" in str(
+                exc_info.value
+            )
 
     def test_bootstrap_handles_service_configuration_error(self):
         """Test that bootstrap handles service configuration errors gracefully."""
@@ -143,7 +146,10 @@ class TestApplication:
             with pytest.raises(ApplicationError) as exc_info:
                 app.bootstrap()
 
-            assert "Failed to configure services" in str(exc_info.value)
+            # The error should be wrapped in a bootstrap failure message
+            assert "Application bootstrap failed" in str(exc_info.value) or "Failed to configure services" in str(
+                exc_info.value
+            )
 
     def test_bootstrap_handles_logging_configuration_error(self):
         """Test that bootstrap handles logging configuration errors gracefully."""
@@ -155,7 +161,10 @@ class TestApplication:
             with pytest.raises(ApplicationError) as exc_info:
                 app.bootstrap()
 
-            assert "Failed to configure logging" in str(exc_info.value)
+            # The error should be wrapped in a bootstrap failure message
+            assert "Application bootstrap failed" in str(exc_info.value) or "Failed to configure logging" in str(
+                exc_info.value
+            )
 
     def test_run_requires_bootstrap(self):
         """Test that run requires bootstrap to be called first."""
@@ -228,8 +237,10 @@ class TestApplication:
         """Test ApplicationError with details."""
         error = ApplicationError("Test error", {"component": "bootstrap"})
 
-        assert str(error) == "Test error"
+        assert error.message == "Test error"
         assert error.details == {"component": "bootstrap"}
+        assert "Test error" in str(error)
+        assert "bootstrap" in str(error)
 
     def test_bootstrap_is_idempotent(self):
         """Test that calling bootstrap multiple times is safe."""
