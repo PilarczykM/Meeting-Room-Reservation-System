@@ -2,6 +2,7 @@ import logging
 
 from src.application.commands.commands import CancelBookingCommand
 from src.application.exceptions import CancellationFailedError
+from src.domain.repositories.meeting_room_repository import MeetingRoomRepository
 
 logger = logging.getLogger(__name__)
 
@@ -9,7 +10,7 @@ logger = logging.getLogger(__name__)
 class CancellationService:
     """Service for managing booking cancellations."""
 
-    def __init__(self, booking_repository):
+    def __init__(self, booking_repository: MeetingRoomRepository):
         self.booking_repository = booking_repository
 
     def cancel_booking(self, command: CancelBookingCommand):
