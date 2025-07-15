@@ -2,7 +2,7 @@
 
 from enum import Enum
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 
 class Environment(str, Enum):
@@ -36,7 +36,8 @@ class LoggingConfig(BaseModel):
     format: str = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     handlers: list[str] = Field(default_factory=lambda: ["console"])
 
-    @validator("handlers")
+    @field_validator("handlers")
+    @classmethod
     def validate_handlers(cls, v):
         """Validate that at least one handler is specified."""
         if not v:
@@ -53,24 +54,25 @@ class ApplicationConfig(BaseModel):
     repository_type: RepositoryType = RepositoryType.IN_MEMORY
     logging: LoggingConfig = Field(default_factory=LoggingConfig)
 
-    @validator("logging", pre=True, always=True)
-    def set_logging_config(cls, v, values):
+    model_config = ConfigDict(
+        use_enum_values=True,
+        validate_assignment=True,
+    )
+
+    @field_validator("logging", mode="before")
+    @classmethod
+    def set_logging_config(cls, v):
         """Ensure logging config is consistent with top-level settings."""
         if isinstance(v, dict):
             v = LoggingConfig(**v)
         elif v is None:
             v = LoggingConfig()
-
-        # Sync top-level log settings with logging config
-        if "log_level" in values:
-            v.level = values["log_level"]
-        if "log_format" in values:
-            v.format = values["log_format"]
-
         return v
 
-    class Config:
-        """Pydantic configuration."""
-
-        use_enum_values = True
-        validate_assignment = True
+    @model_validator(mode="after")
+    def sync_logging_config(self):
+        """Sync top-level log settings with logging config."""
+        # Update logging config to match top-level settings
+        self.logging.level = self.log_level
+        self.logging.format = self.log_format
+        return self
