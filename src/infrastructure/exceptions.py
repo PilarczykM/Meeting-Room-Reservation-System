@@ -120,3 +120,33 @@ class ResourceCleanupError(InfrastructureError):
             message += f" (ID: {resource_id})"
 
         super().__init__(message, details, cause)
+
+
+class StorageError(InfrastructureError):
+    """Exception raised when storage operations fail."""
+
+    def __init__(self, message: str, details: dict[str, Any] | None = None, cause: Exception | None = None):
+        """Initialize storage error with context.
+
+        Args:
+            message: Human-readable error message
+            details: Additional error context and debugging information
+            cause: The underlying exception that caused this error
+
+        """
+        super().__init__(message, details, cause)
+
+
+class StorageConfigurationError(StorageError):
+    """Exception raised when storage is misconfigured."""
+
+    def __init__(self, message: str, details: dict[str, Any] | None = None, cause: Exception | None = None):
+        """Initialize storage configuration error with context.
+
+        Args:
+            message: Human-readable error message
+            details: Additional error context and debugging information
+            cause: The underlying exception that caused this error
+
+        """
+        super().__init__(message, details, cause)

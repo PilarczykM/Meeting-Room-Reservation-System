@@ -1,6 +1,6 @@
 # Implementation Plan
 
-- [ ] 1. Create custom storage exceptions for error handling
+- [-] 1. Create custom storage exceptions for error handling
   - Add StorageError and StorageConfigurationError to infrastructure exceptions
   - Write unit tests for exception classes
   - _Requirements: 3.2, 3.3_
