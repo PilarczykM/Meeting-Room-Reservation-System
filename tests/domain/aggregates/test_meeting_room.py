@@ -36,7 +36,7 @@ def test_book_room_invalid_attendee_count(meeting_room, time_slot_1):
 
 def test_book_room_overlapping_booking(meeting_room, time_slot_1, overlapping_time_slot):
     meeting_room.book(time_slot_1, "John Doe", 10)
-    with pytest.raises(OverlappingBookingError, match="The requested time slot overlaps with an existing"):
+    with pytest.raises(OverlappingBookingError):
         meeting_room.book(overlapping_time_slot, "Jane Doe", 5)
 
 

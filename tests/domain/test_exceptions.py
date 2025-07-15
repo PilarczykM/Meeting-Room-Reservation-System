@@ -1,5 +1,3 @@
-from datetime import datetime
-
 import pytest
 
 from src.domain.exceptions import (
@@ -18,7 +16,7 @@ def test_domain_error_base_class():
 
 def test_overlapping_booking_error():
     with pytest.raises(OverlappingBookingError, match="The requested time slot overlaps with an existing booking."):
-        raise OverlappingBookingError(datetime.utcnow(), datetime.utcnow())
+        raise OverlappingBookingError()
 
 
 def test_invalid_attendee_count_error():
@@ -28,12 +26,12 @@ def test_invalid_attendee_count_error():
 
 def test_booking_not_found_error():
     with pytest.raises(BookingNotFoundError, match="Booking not found."):
-        raise BookingNotFoundError("123")
+        raise BookingNotFoundError()
 
 
 def test_invalid_time_slot_error():
     with pytest.raises(InvalidTimeSlotError):
-        raise InvalidTimeSlotError(datetime.utcnow(), datetime.utcnow())
+        raise InvalidTimeSlotError()
 
 
 def test_exception_inheritance():
