@@ -4,10 +4,9 @@ from src.application.services.booking_service import BookingService
 from src.application.services.cancellation_service import CancellationService
 from src.application.services.query_service import QueryService
 from src.domain.repositories.meeting_room_repository import MeetingRoomRepository
-
-from .config.models import ApplicationConfig, Environment, RepositoryType
-from .container import ServiceContainer
-from .repositories.in_memory_repository import InMemoryMeetingRoomRepository
+from src.infrastructure.config.models import ApplicationConfig, Environment, RepositoryType
+from src.infrastructure.container import ServiceContainer
+from src.infrastructure.repositories.in_memory_repository import InMemoryMeetingRoomRepository
 
 
 class ServiceConfigurator:
