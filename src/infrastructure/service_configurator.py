@@ -4,9 +4,11 @@ from src.application.services.booking_service import BookingService
 from src.application.services.cancellation_service import CancellationService
 from src.application.services.query_service import QueryService
 from src.domain.repositories.meeting_room_repository import MeetingRoomRepository
-from src.infrastructure.config.models import ApplicationConfig, Environment, RepositoryType
+from src.infrastructure.config.models import ApplicationConfig, Environment, RepositoryType, StorageType
 from src.infrastructure.container import ServiceContainer
+from src.infrastructure.exceptions import ServiceConfigurationError
 from src.infrastructure.repositories.in_memory_repository import InMemoryMeetingRoomRepository
+from src.infrastructure.repositories.json_repository import JsonMeetingRoomRepository
 
 
 class ServiceConfigurator:
@@ -32,10 +34,10 @@ class ServiceConfigurator:
 
     def configure_repositories(self) -> None:
         """Configure domain repositories with their implementations."""
-        repository_impl = self._get_repository_implementation(self.config.repository_type)
+        repository_factory = self._get_repository_factory_from_storage()
 
-        # Register repository as singleton (shared across application)
-        self.container.register_singleton(MeetingRoomRepository, repository_impl)
+        # Register repository factory as singleton (shared across application)
+        self.container.register_singleton(MeetingRoomRepository, repository_factory)
 
     def configure_application_services(self) -> None:
         """Configure application layer services."""
@@ -47,11 +49,43 @@ class ServiceConfigurator:
     def configure_infrastructure_services(self) -> None:
         """Configure infrastructure layer services."""
         # Infrastructure services are typically singletons
-        repository_impl = self._get_repository_implementation(self.config.repository_type)
+        repository_factory = self._get_repository_factory_from_storage()
 
         # Ensure repository implementation is registered
         if not self._is_service_registered(MeetingRoomRepository):
-            self.container.register_singleton(MeetingRoomRepository, repository_impl)
+            self.container.register_singleton(MeetingRoomRepository, repository_factory)
+
+    def _get_repository_implementation_from_storage(self):
+        """Get the repository implementation based on storage configuration.
+
+        Returns:
+            The repository implementation instance
+
+        Raises:
+            ServiceConfigurationError: If storage type is not supported
+
+        """
+        storage_type = self.config.storage.type
+        storage_path = self.config.storage.path
+
+        try:
+            if storage_type == StorageType.JSON:
+                return JsonMeetingRoomRepository(storage_path)
+            elif storage_type == StorageType.IN_MEMORY:
+                return InMemoryMeetingRoomRepository()
+            else:
+                raise ServiceConfigurationError(  # noqa: TRY301
+                    f"Unsupported storage type: {storage_type}",
+                    details={"storage_type": storage_type, "storage_path": storage_path},
+                )
+        except Exception as e:
+            if isinstance(e, ServiceConfigurationError):
+                raise
+            raise ServiceConfigurationError(
+                f"Failed to create repository implementation for storage type: {storage_type}",
+                details={"storage_type": storage_type, "storage_path": storage_path},
+                cause=e,
+            ) from e
 
     def _get_repository_implementation(self, repository_type: str) -> type:
         """Get the repository implementation class for the given type.

@@ -212,3 +212,98 @@ class TestServiceConfigurator:
             configurator._get_repository_implementation("unsupported_type")
 
         assert "unsupported repository type" in str(exc_info.value).lower()
+
+
+class TestServiceConfiguratorWithJsonRepository:
+    """Test cases for service configurator with JSON repository support."""
+
+    def test_configure_repositories_with_json_storage(self):
+        """Test that repositories are configured with JSON storage when specified."""
+        from src.infrastructure.config.models import ApplicationConfig
+        from src.infrastructure.repositories.json_repository import JsonMeetingRoomRepository
+
+        config = ApplicationConfig(storage={"type": "json", "path": "test/storage/path"})
+        container = ServiceContainer()
+        configurator = ServiceConfigurator(container, config)
+
+        configurator.configure_repositories()
+
+        repository = container.resolve(MeetingRoomRepository)
+        assert isinstance(repository, JsonMeetingRoomRepository)
+        assert repository._storage_path == "test/storage/path"
+
+    def test_configure_repositories_with_in_memory_storage(self):
+        """Test that repositories are configured with in-memory storage when specified."""
+        from src.infrastructure.config.models import ApplicationConfig
+
+        config = ApplicationConfig(storage={"type": "in_memory", "path": "ignored/path"})
+        container = ServiceContainer()
+        configurator = ServiceConfigurator(container, config)
+
+        configurator.configure_repositories()
+
+        repository = container.resolve(MeetingRoomRepository)
+        assert isinstance(repository, InMemoryMeetingRoomRepository)
+
+    def test_configure_repositories_defaults_to_json_storage(self):
+        """Test that repositories default to JSON storage with default configuration."""
+        from src.infrastructure.config.models import ApplicationConfig
+        from src.infrastructure.repositories.json_repository import JsonMeetingRoomRepository
+
+        config = ApplicationConfig()  # Uses defaults
+        container = ServiceContainer()
+        configurator = ServiceConfigurator(container, config)
+
+        configurator.configure_repositories()
+
+        repository = container.resolve(MeetingRoomRepository)
+        assert isinstance(repository, JsonMeetingRoomRepository)
+        assert repository._storage_path == "data/meeting_rooms"
+
+    def test_configure_repositories_raises_error_for_unsupported_storage(self):
+        """Test that unsupported storage types raise appropriate errors."""
+        from src.infrastructure.config.models import ApplicationConfig
+        from src.infrastructure.exceptions import ServiceConfigurationError
+
+        # Create config with unsupported storage type by bypassing validation
+        config = ApplicationConfig()
+        config.storage.type = "unsupported_type"  # Bypass enum validation
+
+        container = ServiceContainer()
+        configurator = ServiceConfigurator(container, config)
+
+        import pytest
+
+        with pytest.raises(ServiceConfigurationError):
+            configurator.configure_repositories()
+
+    def test_backward_compatibility_with_repository_type(self):
+        """Test that old repository_type configuration still works."""
+        from src.infrastructure.config.models import ApplicationConfig, RepositoryType
+
+        config = ApplicationConfig(repository_type=RepositoryType.IN_MEMORY)
+        container = ServiceContainer()
+        configurator = ServiceConfigurator(container, config)
+
+        configurator.configure_repositories()
+
+        repository = container.resolve(MeetingRoomRepository)
+        assert isinstance(repository, InMemoryMeetingRoomRepository)
+
+    def test_storage_config_takes_precedence_over_repository_type(self):
+        """Test that storage config takes precedence over legacy repository_type."""
+        from src.infrastructure.config.models import ApplicationConfig, RepositoryType
+        from src.infrastructure.repositories.json_repository import JsonMeetingRoomRepository
+
+        config = ApplicationConfig(
+            repository_type=RepositoryType.IN_MEMORY,  # Legacy setting
+            storage={"type": "json", "path": "custom/path"},  # New setting takes precedence
+        )
+        container = ServiceContainer()
+        configurator = ServiceConfigurator(container, config)
+
+        configurator.configure_repositories()
+
+        repository = container.resolve(MeetingRoomRepository)
+        assert isinstance(repository, JsonMeetingRoomRepository)
+        assert repository._storage_path == "custom/path"
