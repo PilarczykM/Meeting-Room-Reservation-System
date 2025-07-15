@@ -50,16 +50,16 @@
 **Branch**: `feature/cli-booking-command`
 **Reference**: `{ROOT}/docs/PRD.md Section 3.1.1`, {ROOT}/docs/event_storming/_meeting_room_event_storming.mmd (booking sequence)
 
-- [ ] Create infrastructure/cli/commands/booking_command.py
-- [ ] Implement interactive booking form using rich
-- [ ] Add input validation and user feedback
-- [ ] Implement date/time input parsing
-- [ ] Add confirmation and success messages
-- [ ] Handle and display booking errors gracefully
-- [ ] **Tests**: Test booking command with various inputs
-- [ ] **Tests**: Test error handling and user feedback
-- [ ] **Tests**: Test input validation scenarios
-- [ ] **Acceptance Criteria**: Users can easily book rooms through CLI
+- [x] Create infrastructure/cli/commands/booking_command.py
+- [x] Implement interactive booking form using rich
+- [x] Add input validation and user feedback
+- [x] Implement date/time input parsing
+- [x] Add confirmation and success messages
+- [x] Handle and display booking errors gracefully
+- [x] **Tests**: Test booking command with various inputs
+- [x] **Tests**: Test error handling and user feedback
+- [x] **Tests**: Test input validation scenarios
+- [x] **Acceptance Criteria**: Users can easily book rooms through CLI
 - [ ] **Commit**
 
 ### 4.5 CLI Commands - Cancellation Command
