@@ -1,13 +1,13 @@
 # Implementation Plan
 
-- [ ] 1. Create configuration management system
+- [x] 1. Create configuration management system
   - Implement ApplicationConfig dataclass with validation using Pydantic
   - Create ConfigurationManager class to load config from multiple sources
   - Add environment-specific configuration file support (dev, test, prod)
   - Implement configuration validation with clear error messages
   - _Requirements: 3.1, 3.2, 3.3, 3.4_
 
-- [ ] 2. Implement dependency injection container
+- [x] 2. Implement dependency injection container
   - Create ServiceContainer class with registration methods for different lifetimes
   - Implement service resolution with proper dependency injection
   - Add support for singleton, transient, and scoped service lifetimes
