@@ -55,11 +55,11 @@ class ServiceConfigurator:
         if not self._is_service_registered(MeetingRoomRepository):
             self.container.register_singleton(MeetingRoomRepository, repository_factory)
 
-    def _get_repository_implementation_from_storage(self):
-        """Get the repository implementation based on storage configuration.
+    def _get_repository_factory_from_storage(self):
+        """Get the repository factory based on storage configuration.
 
         Returns:
-            The repository implementation instance
+            A repository class that creates the repository implementation
 
         Raises:
             ServiceConfigurationError: If storage type is not supported
@@ -70,21 +70,34 @@ class ServiceConfigurator:
 
         try:
             if storage_type == StorageType.JSON:
-                return JsonMeetingRoomRepository(storage_path)
+                # Create a dynamic class that wraps JsonMeetingRoomRepository
+                class JsonRepositoryWrapper(MeetingRoomRepository):
+                    def __init__(self):
+                        self._repository = JsonMeetingRoomRepository(storage_path)
+
+                    def save(self, meeting_room):
+                        return self._repository.save(meeting_room)
+
+                    def find_by_id(self, room_id):
+                        return self._repository.find_by_id(room_id)
+
+                    def find_all(self):
+                        return self._repository.find_all()
+
+                    def delete(self, room_id):
+                        return self._repository.delete(room_id)
+
+                return JsonRepositoryWrapper
             elif storage_type == StorageType.IN_MEMORY:
-                return InMemoryMeetingRoomRepository()
+                # Return the class itself for in-memory repository
+                return InMemoryMeetingRoomRepository
             else:
-                raise ServiceConfigurationError(  # noqa: TRY301
-                    f"Unsupported storage type: {storage_type}",
-                    details={"storage_type": storage_type, "storage_path": storage_path},
-                )
+                self._raise_unsupported_storage_error(storage_type)
         except Exception as e:
             if isinstance(e, ServiceConfigurationError):
                 raise
             raise ServiceConfigurationError(
-                f"Failed to create repository implementation for storage type: {storage_type}",
-                details={"storage_type": storage_type, "storage_path": storage_path},
-                cause=e,
+                f"Failed to create repository implementation for storage type: {storage_type}"
             ) from e
 
     def _get_repository_implementation(self, repository_type: str) -> type:
@@ -131,6 +144,18 @@ class ServiceConfigurator:
         # Production-specific configuration
         # Could add performance optimizations, monitoring, etc.
         pass
+
+    def _raise_unsupported_storage_error(self, storage_type: str) -> None:
+        """Raise an error for unsupported storage types.
+
+        Args:
+            storage_type: The unsupported storage type
+
+        Raises:
+            ServiceConfigurationError: Always raised for unsupported storage types
+
+        """
+        raise ServiceConfigurationError(f"Unsupported storage type: {storage_type}")
 
     def _is_service_registered(self, service_type: type) -> bool:
         """Check if a service type is already registered.
