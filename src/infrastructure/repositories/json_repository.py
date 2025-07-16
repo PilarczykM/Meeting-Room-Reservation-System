@@ -191,24 +191,28 @@ class JsonMeetingRoomRepository(MeetingRoomRepository):
         with self._lock:
             # Get all JSON files in storage directory
             all_rooms = []
+            storage_path = Path(self._storage_path)
 
-            if not os.path.exists(self._storage_path):
+            if not storage_path.exists():
                 return all_rooms
 
-            for filename in os.listdir(self._storage_path):
-                if filename.endswith(".json"):
-                    room_id = filename[:-5]  # Remove .json extension
+            for filename in storage_path.iterdir():
+                if filename.suffix != ".json":
+                    continue
 
-                    # Check cache first
-                    if room_id in self._cache:
-                        all_rooms.append(self._cache[room_id])
-                    else:
-                        # Load from file
-                        meeting_room = self._load_from_file(room_id)
-                        if meeting_room is not None:
-                            # Cache the loaded room
-                            self._cache[room_id] = meeting_room
-                            all_rooms.append(meeting_room)
+                room_id = filename.stem
+
+                # Check cache first
+                if room_id in self._cache:
+                    all_rooms.append(self._cache[room_id])
+                else:
+                    # Load from file
+                    meeting_room = self._load_from_file(room_id)
+                    if meeting_room is None:
+                        continue
+                    # Cache the loaded room
+                    self._cache[room_id] = meeting_room
+                    all_rooms.append(meeting_room)
 
             return all_rooms
 

@@ -1,10 +1,18 @@
 """Tests for JSON-based meeting room repository."""
 
+import json
 import os
 import tempfile
+import threading
+import time
+from unittest.mock import mock_open, patch
 
+import pytest
+
+from src.domain.aggregates.meeting_room import MeetingRoom
+from src.domain.entities.timeslot import TimeSlot
 from src.domain.repositories.meeting_room_repository import MeetingRoomRepository
-from src.infrastructure.exceptions import StorageConfigurationError
+from src.infrastructure.exceptions import StorageConfigurationError, StorageError
 from src.infrastructure.repositories.json_repository import JsonMeetingRoomRepository
 
 
@@ -51,8 +59,6 @@ class TestJsonMeetingRoomRepositoryInitialization:
         """Test that repository raises error for invalid storage path."""
         # Try to create directory in a location that doesn't allow it
         invalid_path = "/root/invalid_storage_path"
-
-        import pytest
 
         with pytest.raises(StorageConfigurationError):
             JsonMeetingRoomRepository(invalid_path)
@@ -105,7 +111,6 @@ class TestJsonMeetingRoomRepositorySerialization:
 
     def test_save_to_file_creates_json_file(self):
         """Test that _save_to_file creates a JSON file with correct content."""
-        from src.domain.aggregates.meeting_room import MeetingRoom
 
         with tempfile.TemporaryDirectory() as temp_dir:
             repository = JsonMeetingRoomRepository(temp_dir)
@@ -271,7 +276,6 @@ class TestJsonMeetingRoomRepositoryCRUD:
 
     def test_save_creates_new_meeting_room_file(self):
         """Test that save() creates a new JSON file for a meeting room."""
-        from src.domain.aggregates.meeting_room import MeetingRoom
 
         with tempfile.TemporaryDirectory() as temp_dir:
             repository = JsonMeetingRoomRepository(temp_dir)
@@ -289,8 +293,6 @@ class TestJsonMeetingRoomRepositoryCRUD:
 
     def test_save_updates_existing_meeting_room_file(self):
         """Test that save() updates an existing meeting room file."""
-        from src.domain.aggregates.meeting_room import MeetingRoom
-        from src.domain.entities.timeslot import TimeSlot
 
         with tempfile.TemporaryDirectory() as temp_dir:
             repository = JsonMeetingRoomRepository(temp_dir)
@@ -312,9 +314,6 @@ class TestJsonMeetingRoomRepositoryCRUD:
 
     def test_save_is_thread_safe(self):
         """Test that save() operations are thread-safe."""
-        import threading
-
-        from src.domain.aggregates.meeting_room import MeetingRoom
 
         with tempfile.TemporaryDirectory() as temp_dir:
             repository = JsonMeetingRoomRepository(temp_dir)
@@ -344,8 +343,6 @@ class TestJsonMeetingRoomRepositoryCRUD:
 
     def test_find_by_id_returns_existing_room(self):
         """Test that find_by_id() returns an existing meeting room."""
-        from src.domain.aggregates.meeting_room import MeetingRoom
-
         with tempfile.TemporaryDirectory() as temp_dir:
             repository = JsonMeetingRoomRepository(temp_dir)
 
@@ -393,8 +390,6 @@ class TestJsonMeetingRoomRepositoryCRUD:
 
     def test_find_by_id_loads_from_file_when_not_cached(self):
         """Test that find_by_id() loads from file when not in cache."""
-        from src.domain.aggregates.meeting_room import MeetingRoom
-
         with tempfile.TemporaryDirectory() as temp_dir:
             repository = JsonMeetingRoomRepository(temp_dir)
 
@@ -415,8 +410,6 @@ class TestJsonMeetingRoomRepositoryCRUD:
 
     def test_find_all_returns_all_meeting_rooms(self):
         """Test that find_all() returns all stored meeting rooms."""
-        from src.domain.aggregates.meeting_room import MeetingRoom
-
         with tempfile.TemporaryDirectory() as temp_dir:
             repository = JsonMeetingRoomRepository(temp_dir)
 
@@ -446,8 +439,6 @@ class TestJsonMeetingRoomRepositoryCRUD:
 
     def test_find_all_loads_rooms_from_files(self):
         """Test that find_all() loads rooms from files not in cache."""
-        from src.domain.aggregates.meeting_room import MeetingRoom
-
         with tempfile.TemporaryDirectory() as temp_dir:
             repository = JsonMeetingRoomRepository(temp_dir)
 
@@ -469,8 +460,6 @@ class TestJsonMeetingRoomRepositoryCRUD:
 
     def test_delete_removes_meeting_room_file(self):
         """Test that delete() removes the meeting room file."""
-        from src.domain.aggregates.meeting_room import MeetingRoom
-
         with tempfile.TemporaryDirectory() as temp_dir:
             repository = JsonMeetingRoomRepository(temp_dir)
 
@@ -499,10 +488,6 @@ class TestJsonMeetingRoomRepositoryCRUD:
 
     def test_delete_is_thread_safe(self):
         """Test that delete() operations are thread-safe."""
-        import threading
-
-        from src.domain.aggregates.meeting_room import MeetingRoom
-
         with tempfile.TemporaryDirectory() as temp_dir:
             repository = JsonMeetingRoomRepository(temp_dir)
 
@@ -540,8 +525,6 @@ class TestJsonMeetingRoomRepositoryErrorHandling:
 
     def test_corrupted_json_file_recovery(self):
         """Test that corrupted JSON files are handled gracefully with backup creation."""
-        from src.domain.aggregates.meeting_room import MeetingRoom
-
         with tempfile.TemporaryDirectory() as temp_dir:
             repository = JsonMeetingRoomRepository(temp_dir)
 
@@ -573,9 +556,6 @@ class TestJsonMeetingRoomRepositoryErrorHandling:
 
     def test_permission_error_handling(self):
         """Test handling of permission errors during file operations."""
-        from src.domain.aggregates.meeting_room import MeetingRoom
-        from src.infrastructure.exceptions import StorageError
-
         with tempfile.TemporaryDirectory() as temp_dir:
             repository = JsonMeetingRoomRepository(temp_dir)
             room = MeetingRoom(id="permission-room", capacity=12)
@@ -584,8 +564,6 @@ class TestJsonMeetingRoomRepositoryErrorHandling:
             os.chmod(temp_dir, 0o444)
 
             try:
-                import pytest
-
                 with pytest.raises(StorageError) as exc_info:
                     repository.save(room)
 
@@ -598,11 +576,6 @@ class TestJsonMeetingRoomRepositoryErrorHandling:
 
     def test_disk_space_error_simulation(self):
         """Test handling of disk space errors during save operations."""
-        from unittest.mock import mock_open, patch
-
-        from src.domain.aggregates.meeting_room import MeetingRoom
-        from src.infrastructure.exceptions import StorageError
-
         with tempfile.TemporaryDirectory() as temp_dir:
             repository = JsonMeetingRoomRepository(temp_dir)
             room = MeetingRoom(id="diskspace-room", capacity=10)
@@ -611,8 +584,6 @@ class TestJsonMeetingRoomRepositoryErrorHandling:
             with patch("builtins.open", mock_open()) as mock_file:
                 mock_file.side_effect = OSError("No space left on device")
 
-                import pytest
-
                 with pytest.raises(StorageError) as exc_info:
                     repository.save(room)
 
@@ -620,8 +591,6 @@ class TestJsonMeetingRoomRepositoryErrorHandling:
 
     def test_missing_directory_auto_creation(self):
         """Test that missing directories are automatically created."""
-        from src.domain.aggregates.meeting_room import MeetingRoom
-
         with tempfile.TemporaryDirectory() as temp_dir:
             # Use a nested path that doesn't exist
             nested_path = os.path.join(temp_dir, "level1", "level2", "storage")
@@ -642,10 +611,6 @@ class TestJsonMeetingRoomRepositoryErrorHandling:
 
     def test_concurrent_file_access_error_handling(self):
         """Test handling of concurrent file access conflicts."""
-        import threading
-        import time
-
-        from src.domain.aggregates.meeting_room import MeetingRoom
 
         with tempfile.TemporaryDirectory() as temp_dir:
             repository = JsonMeetingRoomRepository(temp_dir)
@@ -689,8 +654,6 @@ class TestJsonMeetingRoomRepositoryErrorHandling:
             # Create a JSON file with valid JSON but invalid structure that will cause validation error
             file_path = repository._get_file_path("invalid-structure")
             with open(file_path, "w") as f:
-                import json
-
                 # Use invalid data types that will cause Pydantic validation to fail
                 json.dump({"id": 123, "capacity": "not_a_number", "bookings": "not_a_list"}, f)
 
@@ -722,10 +685,6 @@ class TestJsonMeetingRoomRepositoryErrorHandling:
 
     def test_network_storage_error_simulation(self):
         """Test handling of network storage errors."""
-        from unittest.mock import patch
-
-        from src.domain.aggregates.meeting_room import MeetingRoom
-        from src.infrastructure.exceptions import StorageError
 
         with tempfile.TemporaryDirectory() as temp_dir:
             repository = JsonMeetingRoomRepository(temp_dir)
@@ -735,18 +694,11 @@ class TestJsonMeetingRoomRepositoryErrorHandling:
             with patch("os.replace") as mock_replace:
                 mock_replace.side_effect = OSError("Network is unreachable")
 
-                import pytest
-
                 with pytest.raises(StorageError):
                     repository.save(room)
 
     def test_atomic_write_failure_cleanup(self):
         """Test that temporary files are cleaned up when atomic writes fail."""
-        from unittest.mock import patch
-
-        from src.domain.aggregates.meeting_room import MeetingRoom
-        from src.infrastructure.exceptions import StorageError
-
         with tempfile.TemporaryDirectory() as temp_dir:
             repository = JsonMeetingRoomRepository(temp_dir)
             room = MeetingRoom(id="atomic-fail-room", capacity=16)
@@ -766,8 +718,6 @@ class TestJsonMeetingRoomRepositoryErrorHandling:
 
     def test_logging_for_error_conditions(self):
         """Test that error conditions are properly logged."""
-        from unittest.mock import patch
-
         with tempfile.TemporaryDirectory() as temp_dir:
             repository = JsonMeetingRoomRepository(temp_dir)
 
