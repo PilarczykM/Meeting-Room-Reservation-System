@@ -127,10 +127,32 @@ class JsonMeetingRoomRepository(MeetingRoomRepository):
             return MeetingRoom.model_validate(json_data)
 
         except (OSError, PermissionError, json.JSONDecodeError, ValueError) as e:
+            # Create backup of corrupted file for recovery
+            self._create_backup_file(file_path)
+
             # Log error and return None for corrupted/unreadable files
             # In a real application, you'd use proper logging here
             print(f"Warning: Failed to load meeting room {room_id} from {file_path}: {e}")
             return None
+
+    def _create_backup_file(self, file_path: str) -> None:
+        """Create a backup of a corrupted file for recovery purposes.
+
+        Args:
+            file_path: Path to the file to backup
+
+        """
+        backup_path = f"{file_path}.backup"
+        try:
+            if os.path.exists(file_path):
+                # Copy the corrupted file to backup location
+                import shutil
+
+                shutil.copy2(file_path, backup_path)
+        except OSError:
+            # If backup creation fails, continue silently
+            # This prevents backup failures from breaking the main operation
+            pass
 
     def save(self, meeting_room: MeetingRoom) -> None:
         """Save a MeetingRoom aggregate to JSON storage.
