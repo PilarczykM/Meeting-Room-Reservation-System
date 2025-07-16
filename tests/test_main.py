@@ -1,6 +1,7 @@
 """Tests for the main application entry point."""
 
 import logging
+import signal
 import sys
 from argparse import Namespace
 from unittest.mock import Mock, patch
@@ -189,8 +190,6 @@ class TestMainEntryPoint:
             calls = mock_signal.call_args_list
 
             # Check SIGINT handler
-            import signal
-
             sigint_call = next(call for call in calls if call[0][0] == signal.SIGINT)
             assert sigint_call is not None
 

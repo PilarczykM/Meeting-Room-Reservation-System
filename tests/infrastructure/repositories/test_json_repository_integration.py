@@ -1,5 +1,6 @@
 """Integration tests for JSON repository end-to-end persistence."""
 
+import json
 import os
 import tempfile
 import threading
@@ -7,6 +8,7 @@ import time
 
 from src.domain.aggregates.meeting_room import MeetingRoom
 from src.domain.entities.timeslot import TimeSlot
+from src.domain.repositories.meeting_room_repository import MeetingRoomRepository
 from src.infrastructure.config.models import ApplicationConfig
 from src.infrastructure.container import ServiceContainer
 from src.infrastructure.repositories.json_repository import JsonMeetingRoomRepository
@@ -133,8 +135,6 @@ class TestJsonRepositoryIntegration:
             configurator.configure_repositories()
 
             # Resolve repository from container
-            from src.domain.repositories.meeting_room_repository import MeetingRoomRepository
-
             repository = container.resolve(MeetingRoomRepository)
 
             # Verify it's the JSON repository wrapper
@@ -265,8 +265,6 @@ class TestJsonRepositoryIntegration:
             assert os.path.exists(expected_file)
 
             # Verify file contents
-            import json
-
             with open(expected_file) as f:
                 data = json.load(f)
 
