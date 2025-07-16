@@ -1,12 +1,14 @@
 """JSON-based implementation of the MeetingRoomRepository."""
 
+import json
 import os
+import shutil
 import threading
 from pathlib import Path
 
 from src.domain.aggregates.meeting_room import MeetingRoom
 from src.domain.repositories.meeting_room_repository import MeetingRoomRepository
-from src.infrastructure.exceptions import StorageConfigurationError
+from src.infrastructure.exceptions import StorageConfigurationError, StorageError
 
 
 class JsonMeetingRoomRepository(MeetingRoomRepository):
@@ -70,8 +72,6 @@ class JsonMeetingRoomRepository(MeetingRoomRepository):
             StorageError: If the file cannot be written
 
         """
-        import json
-
         file_path = self._get_file_path(meeting_room.id)
         temp_path = f"{file_path}.tmp"
 
@@ -94,8 +94,6 @@ class JsonMeetingRoomRepository(MeetingRoomRepository):
                 except OSError:
                     pass  # Ignore cleanup errors
 
-            from src.infrastructure.exceptions import StorageError
-
             raise StorageError(
                 f"Failed to save meeting room to file: {file_path}",
                 details={"room_id": meeting_room.id, "file_path": file_path, "error": str(e)},
@@ -112,8 +110,6 @@ class JsonMeetingRoomRepository(MeetingRoomRepository):
             The MeetingRoom aggregate if found, otherwise None
 
         """
-        import json
-
         file_path = self._get_file_path(room_id)
 
         if not os.path.exists(file_path):
@@ -146,8 +142,6 @@ class JsonMeetingRoomRepository(MeetingRoomRepository):
         try:
             if os.path.exists(file_path):
                 # Copy the corrupted file to backup location
-                import shutil
-
                 shutil.copy2(file_path, backup_path)
         except OSError:
             # If backup creation fails, continue silently

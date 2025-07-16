@@ -122,8 +122,6 @@ class TestJsonMeetingRoomRepositorySerialization:
             assert os.path.exists(file_path)
 
             # Verify JSON content
-            import json
-
             with open(file_path) as f:
                 data = json.load(f)
 
@@ -133,9 +131,6 @@ class TestJsonMeetingRoomRepositorySerialization:
 
     def test_save_to_file_with_bookings(self):
         """Test that _save_to_file correctly serializes meeting room with bookings."""
-        from src.domain.aggregates.meeting_room import MeetingRoom
-        from src.domain.entities.timeslot import TimeSlot
-
         with tempfile.TemporaryDirectory() as temp_dir:
             repository = JsonMeetingRoomRepository(temp_dir)
             meeting_room = MeetingRoom(id="test-room-2", capacity=20)
@@ -149,8 +144,6 @@ class TestJsonMeetingRoomRepositorySerialization:
             file_path = repository._get_file_path("test-room-2")
 
             # Verify JSON content includes booking
-            import json
-
             with open(file_path) as f:
                 data = json.load(f)
 
@@ -161,8 +154,6 @@ class TestJsonMeetingRoomRepositorySerialization:
 
     def test_load_from_file_returns_meeting_room(self):
         """Test that _load_from_file correctly deserializes JSON to MeetingRoom."""
-        from src.domain.aggregates.meeting_room import MeetingRoom
-
         with tempfile.TemporaryDirectory() as temp_dir:
             repository = JsonMeetingRoomRepository(temp_dir)
 
@@ -180,9 +171,6 @@ class TestJsonMeetingRoomRepositorySerialization:
 
     def test_load_from_file_with_bookings(self):
         """Test that _load_from_file correctly deserializes meeting room with bookings."""
-        from src.domain.aggregates.meeting_room import MeetingRoom
-        from src.domain.entities.timeslot import TimeSlot
-
         with tempfile.TemporaryDirectory() as temp_dir:
             repository = JsonMeetingRoomRepository(temp_dir)
 
@@ -213,9 +201,6 @@ class TestJsonMeetingRoomRepositorySerialization:
 
     def test_save_to_file_uses_atomic_writes(self):
         """Test that _save_to_file uses atomic writes with temporary files."""
-        from unittest.mock import mock_open, patch
-
-        from src.domain.aggregates.meeting_room import MeetingRoom
 
         with tempfile.TemporaryDirectory() as temp_dir:
             repository = JsonMeetingRoomRepository(temp_dir)
@@ -236,9 +221,6 @@ class TestJsonMeetingRoomRepositorySerialization:
 
     def test_save_to_file_handles_write_errors(self):
         """Test that _save_to_file handles write errors gracefully."""
-        from src.domain.aggregates.meeting_room import MeetingRoom
-        from src.infrastructure.exceptions import StorageError
-
         with tempfile.TemporaryDirectory() as temp_dir:
             repository = JsonMeetingRoomRepository(temp_dir)
             meeting_room = MeetingRoom(id="test-room-6")
@@ -247,8 +229,6 @@ class TestJsonMeetingRoomRepositorySerialization:
             os.chmod(temp_dir, 0o444)
 
             try:
-                import pytest
-
                 with pytest.raises(StorageError):
                     repository._save_to_file(meeting_room)
             finally:
@@ -368,10 +348,6 @@ class TestJsonMeetingRoomRepositoryCRUD:
 
     def test_find_by_id_uses_cache_when_available(self):
         """Test that find_by_id() uses in-memory cache when available."""
-        from unittest.mock import patch
-
-        from src.domain.aggregates.meeting_room import MeetingRoom
-
         with tempfile.TemporaryDirectory() as temp_dir:
             repository = JsonMeetingRoomRepository(temp_dir)
 
@@ -706,8 +682,6 @@ class TestJsonMeetingRoomRepositoryErrorHandling:
             # Mock os.replace to fail after temp file is created
             with patch("os.replace") as mock_replace:
                 mock_replace.side_effect = OSError("Atomic operation failed")
-
-                import pytest
 
                 with pytest.raises(StorageError):
                     repository.save(room)
