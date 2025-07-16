@@ -3,9 +3,15 @@
   "log_level": "WARNING",
   "log_format": "%(levelname)s - %(message)s",
   "repository_type": "in_memory",
+  "storage": {
+    "type": "in_memory",
+    "path": "test/storage/path"
+  },
   "logging": {
     "level": "WARNING",
     "format": "%(levelname)s - %(message)s",
-    "handlers": ["console"]
+    "handlers": [
+      "console"
+    ]
   }
 }

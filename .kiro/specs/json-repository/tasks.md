@@ -33,7 +33,7 @@
   - Write comprehensive unit tests for all CRUD operations
   - _Requirements: 1.1, 1.2, 1.3, 2.1, 5.2, 5.3, 5.4_
 
-- [ ] 6. Add configuration integration and update dependency injection
+- [x] 6. Add configuration integration and update dependency injection
   - Update service configurator to register JSON repository based on configuration
   - Modify configuration loading to include storage settings with defaults
   - Write integration tests to verify proper repository selection
@@ -53,7 +53,7 @@
   - Test configuration integration with different storage paths
   - _Requirements: 1.1, 1.4, 5.1, 5.2, 5.3, 5.4_
 
-- [ ] 9. Update application configuration files with storage settings
+- [-] 9. Update application configuration files with storage settings
   - Add storage configuration to development.json, production.json, and test.json
   - Set appropriate default paths for each environment
   - Write tests to verify configuration loading in different environments
