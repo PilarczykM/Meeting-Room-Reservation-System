@@ -8,7 +8,9 @@ from src.application.services.query_service import QueryService
 from src.domain.repositories.meeting_room_repository import MeetingRoomRepository
 from src.infrastructure.config.models import ApplicationConfig, Environment, RepositoryType
 from src.infrastructure.container import ServiceContainer
+from src.infrastructure.exceptions import ServiceConfigurationError
 from src.infrastructure.repositories.in_memory_repository import InMemoryMeetingRoomRepository
+from src.infrastructure.repositories.json_repository import JsonMeetingRoomRepository
 from src.infrastructure.service_configurator import ServiceConfigurator
 
 
@@ -35,7 +37,10 @@ class TestServiceConfigurator:
 
         # Should be able to resolve repository (singleton)
         repository = container.resolve(MeetingRoomRepository)
-        assert isinstance(repository, InMemoryMeetingRoomRepository)
+        # With new storage-based configuration, default is JSON repository wrapper
+        assert hasattr(repository, "_repository")
+
+        assert isinstance(repository._repository, JsonMeetingRoomRepository)
 
         # Should be able to resolve scoped services within a scope
         with container.create_scope() as scope:
@@ -57,7 +62,10 @@ class TestServiceConfigurator:
 
         # Should resolve to concrete implementation
         repository = container.resolve(MeetingRoomRepository)
-        assert isinstance(repository, InMemoryMeetingRoomRepository)
+        # With new storage-based configuration, default is JSON repository wrapper
+        assert hasattr(repository, "_repository")
+
+        assert isinstance(repository._repository, JsonMeetingRoomRepository)
 
     def test_configure_application_services(self):
         """Test that application services are configured correctly."""
@@ -90,7 +98,9 @@ class TestServiceConfigurator:
 
         # Should be able to resolve infrastructure implementations
         repository = container.resolve(MeetingRoomRepository)
-        assert isinstance(repository, InMemoryMeetingRoomRepository)
+        # With new storage-based configuration, default is JSON repository wrapper
+        assert hasattr(repository, "_repository")
+        assert isinstance(repository._repository, JsonMeetingRoomRepository)
 
     def test_environment_specific_configuration_development(self):
         """Test development environment specific configuration."""
@@ -140,7 +150,10 @@ class TestServiceConfigurator:
         configurator.configure_repositories()
 
         repository = container.resolve(MeetingRoomRepository)
-        assert isinstance(repository, InMemoryMeetingRoomRepository)
+        # With new storage-based configuration, storage config takes precedence
+        # and defaults to JSON, so repository_type is ignored
+        assert hasattr(repository, "_repository")
+        assert isinstance(repository._repository, JsonMeetingRoomRepository)
 
     def test_service_lifetimes_are_correct(self):
         """Test that services are registered with correct lifetimes."""
@@ -212,3 +225,91 @@ class TestServiceConfigurator:
             configurator._get_repository_implementation("unsupported_type")
 
         assert "unsupported repository type" in str(exc_info.value).lower()
+
+
+class TestServiceConfiguratorWithJsonRepository:
+    """Test cases for service configurator with JSON repository support."""
+
+    def test_configure_repositories_with_json_storage(self):
+        """Test that repositories are configured with JSON storage when specified."""
+        config = ApplicationConfig(storage={"type": "json", "path": "test/storage/path"})
+        container = ServiceContainer()
+        configurator = ServiceConfigurator(container, config)
+
+        configurator.configure_repositories()
+
+        repository = container.resolve(MeetingRoomRepository)
+        # Check that it's a wrapper around JsonMeetingRoomRepository
+        assert hasattr(repository, "_repository")
+        assert isinstance(repository._repository, JsonMeetingRoomRepository)
+        assert repository._repository._storage_path == "test/storage/path"
+
+    def test_configure_repositories_with_in_memory_storage(self):
+        """Test that repositories are configured with in-memory storage when specified."""
+        config = ApplicationConfig(storage={"type": "in_memory", "path": "ignored/path"})
+        container = ServiceContainer()
+        configurator = ServiceConfigurator(container, config)
+
+        configurator.configure_repositories()
+
+        repository = container.resolve(MeetingRoomRepository)
+        assert isinstance(repository, InMemoryMeetingRoomRepository)
+
+    def test_configure_repositories_defaults_to_json_storage(self):
+        """Test that repositories default to JSON storage with default configuration."""
+
+        config = ApplicationConfig()  # Uses defaults
+        container = ServiceContainer()
+        configurator = ServiceConfigurator(container, config)
+
+        configurator.configure_repositories()
+
+        repository = container.resolve(MeetingRoomRepository)
+        # Check that it's a wrapper around JsonMeetingRoomRepository
+        assert hasattr(repository, "_repository")
+        assert isinstance(repository._repository, JsonMeetingRoomRepository)
+        assert repository._repository._storage_path == "data/meeting_rooms"
+
+    def test_configure_repositories_raises_error_for_unsupported_storage(self):
+        """Test that unsupported storage types raise appropriate errors."""
+
+        # Create config with unsupported storage type by bypassing validation
+        config = ApplicationConfig()
+        config.storage.type = "unsupported_type"  # Bypass enum validation
+
+        container = ServiceContainer()
+        configurator = ServiceConfigurator(container, config)
+
+        with pytest.raises(ServiceConfigurationError):
+            configurator.configure_repositories()
+
+    def test_backward_compatibility_with_repository_type(self):
+        """Test that old repository_type configuration still works."""
+        config = ApplicationConfig(repository_type=RepositoryType.IN_MEMORY)
+        container = ServiceContainer()
+        configurator = ServiceConfigurator(container, config)
+
+        configurator.configure_repositories()
+
+        repository = container.resolve(MeetingRoomRepository)
+        # With the new storage-based approach, it should still use JSON by default
+        # but the repository_type is ignored in favor of storage config
+        assert hasattr(repository, "_repository")
+        assert isinstance(repository._repository, JsonMeetingRoomRepository)
+
+    def test_storage_config_takes_precedence_over_repository_type(self):
+        """Test that storage config takes precedence over legacy repository_type."""
+        config = ApplicationConfig(
+            repository_type=RepositoryType.IN_MEMORY,  # Legacy setting
+            storage={"type": "json", "path": "custom/path"},  # New setting takes precedence
+        )
+        container = ServiceContainer()
+        configurator = ServiceConfigurator(container, config)
+
+        configurator.configure_repositories()
+
+        repository = container.resolve(MeetingRoomRepository)
+        # Check that it's a wrapper around JsonMeetingRoomRepository
+        assert hasattr(repository, "_repository")
+        assert isinstance(repository._repository, JsonMeetingRoomRepository)
+        assert repository._repository._storage_path == "custom/path"

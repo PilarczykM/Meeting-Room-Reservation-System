@@ -1,4 +1,5 @@
 import pytest
+from pydantic import ValidationError
 
 from src.domain.entities.booking import Booking
 from src.domain.entities.timeslot import TimeSlot
@@ -15,8 +16,6 @@ def test_booking_creation_valid(time_slot_1):
 
 def test_booking_id_is_frozen(time_slot_1):
     booking = Booking(time_slot=time_slot_1, booker="John Doe", attendees=10)
-    from pydantic import ValidationError
-
     with pytest.raises(ValidationError):
         booking.booking_id = "new-id"
 

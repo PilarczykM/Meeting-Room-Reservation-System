@@ -27,6 +27,7 @@ select = [
     "RUF", # Ruff-specific rules
     "TID", # flake8-tidy-imports
     "TRY", # tryceratops
+    "PLC", # Pylint Convention
 ]
 ignore = [
     "D100", # Missing docstring in public module

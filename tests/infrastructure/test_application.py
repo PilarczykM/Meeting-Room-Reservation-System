@@ -5,6 +5,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
+from src.domain.repositories.meeting_room_repository import MeetingRoomRepository
 from src.infrastructure.application import Application, ApplicationError
 from src.infrastructure.cli.app import CLIApp
 from src.infrastructure.config.models import ApplicationConfig, Environment
@@ -59,7 +60,6 @@ def test_bootstrap_configures_services():
     # Should be able to resolve services after bootstrap
     assert app.container is not None
     # Repository should be available as singleton
-    from src.domain.repositories.meeting_room_repository import MeetingRoomRepository
 
     repository = app.container.resolve(MeetingRoomRepository)
     assert repository is not None
