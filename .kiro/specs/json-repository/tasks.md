@@ -46,14 +46,14 @@
   - Write unit tests for all error scenarios and recovery mechanisms
   - _Requirements: 3.1, 3.2, 3.3, 3.4_
 
-- [ ] 8. Create integration tests for end-to-end persistence
+- [-] 8. Create integration tests for end-to-end persistence
   - Write integration tests that verify data persistence across repository instances
   - Test multiple meeting room storage and retrieval
   - Verify thread safety with concurrent operations
   - Test configuration integration with different storage paths
   - _Requirements: 1.1, 1.4, 5.1, 5.2, 5.3, 5.4_
 
-- [-] 9. Update application configuration files with storage settings
+- [x] 9. Update application configuration files with storage settings
   - Add storage configuration to development.json, production.json, and test.json
   - Set appropriate default paths for each environment
   - Write tests to verify configuration loading in different environments
