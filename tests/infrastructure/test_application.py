@@ -623,3 +623,97 @@ def test_end_to_end_unknown_command_handling():
             # Check that error message was printed
             error_calls = [call for call in mock_print.call_args_list if "Error" in str(call) or "Unknown" in str(call)]
             assert len(error_calls) > 0, "Expected error message to be printed"
+
+
+# Error Handling and Edge Cases Tests
+
+
+def test_graceful_handling_when_services_not_registered():
+    """Test graceful handling when required services are not registered in container."""
+    app = Application()
+
+    # Create a container without registering required services
+    app.container = ServiceContainer()
+    app.config = ApplicationConfig()
+    app.cli_app = CLIApp()
+
+    # Attempt to register commands should fail gracefully
+    with pytest.raises(ApplicationError) as exc_info:
+        app._register_cli_commands()
+
+    assert "Failed to register CLI commands" in str(exc_info.value)
+
+
+def test_application_startup_fails_with_command_registration_error():
+    """Test that application startup fails with clear error message if command registration fails."""
+    app = Application()
+
+    # Mock the command registration to fail
+    with patch.object(app, "_register_cli_commands") as mock_register:
+        mock_register.side_effect = Exception("Command registration failed")
+
+        with pytest.raises(ApplicationError) as exc_info:
+            app.bootstrap()
+
+        assert "Application bootstrap failed" in str(exc_info.value)
+
+
+def test_unknown_command_handling_works_correctly():
+    """Test that unknown command handling still works correctly."""
+    app = Application()
+    app.bootstrap()
+
+    # Test unknown command
+    with patch.object(app.cli_app.console, "print") as mock_print:
+        with patch.object(app.cli_app, "show_help") as mock_help:
+            app.cli_app.run(["nonexistent_command"])
+
+            # Should print error and show help
+            mock_print.assert_called()
+            mock_help.assert_called_once()
+
+
+def test_command_execution_with_various_argument_combinations():
+    """Test command execution with various argument combinations."""
+    app = Application()
+    app.bootstrap()
+
+    # Test commands with different argument patterns
+    test_cases = [
+        (["book"], []),
+        (["book", "arg1"], ["arg1"]),
+        (["book", "arg1", "arg2", "arg3"], ["arg1", "arg2", "arg3"]),
+        (["cancel"], []),
+        (["cancel", "booking-id"], ["booking-id"]),
+        (["list"], []),
+        (["list", "--sort", "time"], ["--sort", "time"]),
+        (["list", "--invalid-flag"], ["--invalid-flag"]),
+    ]
+
+    for command_args, expected_handler_args in test_cases:
+        mock_handler = Mock()
+        app.cli_app.commands[command_args[0]] = mock_handler
+
+        app.cli_app.run(command_args)
+        mock_handler.assert_called_once_with(expected_handler_args)
+        mock_handler.reset_mock()
+
+
+def test_empty_command_list_shows_help():
+    """Test that empty command list shows help."""
+    app = Application()
+    app.bootstrap()
+
+    with patch.object(app.cli_app, "show_help") as mock_help:
+        app.cli_app.run([])
+        mock_help.assert_called_once()
+
+
+def test_application_run_without_bootstrap_fails():
+    """Test that running application without bootstrap fails gracefully."""
+    app = Application()
+
+    with pytest.raises(ApplicationError) as exc_info:
+        app.run(["book"])
+
+    assert "Application not bootstrapped" in str(exc_info.value)
