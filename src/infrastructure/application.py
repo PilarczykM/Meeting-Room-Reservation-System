@@ -3,7 +3,13 @@
 import logging
 from typing import Any
 
+from src.application.services.booking_service import BookingService
+from src.application.services.cancellation_service import CancellationService
+from src.application.services.query_service import QueryService
 from src.infrastructure.cli.app import CLIApp
+from src.infrastructure.cli.commands.booking_command import BookingCommand
+from src.infrastructure.cli.commands.cancellation_command import CancellationCommand
+from src.infrastructure.cli.commands.list_command import ListCommand
 from src.infrastructure.config.manager import ConfigurationError, ConfigurationManager
 from src.infrastructure.config.models import ApplicationConfig, Environment
 from src.infrastructure.container import ServiceContainer
@@ -139,11 +145,11 @@ class Application:
             raise ApplicationError(f"Failed to configure services: {e}") from e
 
     def _create_cli_app(self) -> None:
-        """Create the CLI application."""
+        """Create the CLI application and register commands."""
         self.cli_app = CLIApp()
 
-        # Register CLI commands here
-        # This will be expanded when CLI commands are integrated
+        # Register CLI commands with dependency injection
+        self._register_cli_commands()
 
     def _get_logging_level(self, environment: Environment) -> int:
         """Get the appropriate logging level for the environment.
@@ -163,3 +169,37 @@ class Application:
             return logging.INFO
         else:
             return logging.INFO  # Default to INFO
+
+    def _register_cli_commands(self) -> None:
+        """Register all CLI commands with their dependencies."""
+        try:
+            with self.container.create_scope() as scope:
+                # Resolve required services
+                booking_service = scope.resolve(BookingService)
+                cancellation_service = scope.resolve(CancellationService)
+                query_service = scope.resolve(QueryService)
+
+                # Create and register command handlers
+                self._register_booking_command(booking_service)
+                self._register_cancellation_command(cancellation_service, query_service)
+                self._register_list_command(query_service)
+
+        except Exception as e:
+            raise ApplicationError(f"Failed to register CLI commands: {e}") from e
+
+    def _register_booking_command(self, booking_service: BookingService) -> None:
+        """Register the booking command."""
+        booking_command = BookingCommand(booking_service)
+        self.cli_app.register_command("book", booking_command.execute)
+
+    def _register_cancellation_command(
+        self, cancellation_service: CancellationService, query_service: QueryService
+    ) -> None:
+        """Register the cancellation command."""
+        cancellation_command = CancellationCommand(cancellation_service, query_service)
+        self.cli_app.register_command("cancel", cancellation_command.execute)
+
+    def _register_list_command(self, query_service: QueryService) -> None:
+        """Register the list command."""
+        list_command = ListCommand(query_service)
+        self.cli_app.register_command("list", list_command.execute)
