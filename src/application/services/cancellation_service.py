@@ -39,7 +39,7 @@ class CancellationService:
 
         try:
             # Use the meeting room aggregate to cancel the booking
-            meeting_room.cancel_booking(booking_id)
+            meeting_room.cancel(booking_id)
 
             # Save the updated meeting room
             self.booking_repository.save(meeting_room)
