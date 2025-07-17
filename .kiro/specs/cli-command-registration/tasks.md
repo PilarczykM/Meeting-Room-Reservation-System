@@ -28,14 +28,14 @@
   - Write integration test to verify commands are available after application bootstrap
   - _Requirements: 1.4, 2.1, 3.1, 4.1_
 
-- [x] 5. Test CLI help display functionality
+- [ ] 5. Test CLI help display functionality
   - Write test to verify help message displays all registered commands when no arguments provided
   - Write test to verify command descriptions are shown in formatted table
   - Write test to verify "book", "cancel", and "list" commands appear in help output
   - Manually test that `uv run main.py` shows available commands instead of "No commands registered"
   - _Requirements: 1.1, 1.2, 1.4_
 
-- [ ] 6. Test end-to-end command execution
+- [x] 6. Test end-to-end command execution
   - Write integration test that executes `uv run main.py book` and verifies BookingCommand.execute is called
   - Write integration test that executes `uv run main.py cancel` and verifies CancellationCommand.execute is called  
   - Write integration test that executes `uv run main.py list` and verifies ListCommand.execute is called
