@@ -28,7 +28,7 @@
   - Write integration test to verify commands are available after application bootstrap
   - _Requirements: 1.4, 2.1, 3.1, 4.1_
 
-- [ ] 5. Test CLI help display functionality
+- [x] 5. Test CLI help display functionality
   - Write test to verify help message displays all registered commands when no arguments provided
   - Write test to verify command descriptions are shown in formatted table
   - Write test to verify "book", "cancel", and "list" commands appear in help output
@@ -56,7 +56,7 @@
   - Verify booking data persistence and retrieval through list command
   - _Requirements: 2.2, 2.3, 2.4, 2.5_
 
-- [ ] 9. Validate cancellation flow end-to-end  
+- [-] 9. Validate cancellation flow end-to-end  
   - Test complete cancellation flow: create booking, run cancel command, enter booking ID, confirm cancellation
   - Test cancellation error cases: invalid booking ID, booking not found
   - Test cancellation confirmation workflow and user interaction
