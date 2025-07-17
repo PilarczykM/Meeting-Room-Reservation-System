@@ -3,6 +3,7 @@ from unittest.mock import MagicMock
 import pytest
 
 from src.application.services.query_service import QueryService
+from src.domain.aggregates.meeting_room import MeetingRoom
 from src.domain.entities.booking import Booking
 from src.domain.entities.timeslot import TimeSlot
 
@@ -15,14 +16,14 @@ def query_service():
 
 def test_get_all_bookings_returns_empty_list_when_no_bookings(query_service):
     # Arrange
-    query_service.booking_repository.get_all.return_value = []
+    query_service.booking_repository.find_all.return_value = []
 
     # Act
     bookings = query_service.get_all_bookings()
 
     # Assert
     assert bookings == []
-    query_service.booking_repository.get_all.assert_called_once()
+    query_service.booking_repository.find_all.assert_called_once()
 
 
 def test_get_all_bookings_returns_formatted_bookings(query_service):
@@ -33,7 +34,11 @@ def test_get_all_bookings_returns_formatted_bookings(query_service):
     time_slot2 = TimeSlot.create("2025-07-15T12:00:00", "2025-07-15T13:00:00")
     booking2 = Booking.create(time_slot2, "booker2", 5, booking_id="id2")
 
-    query_service.booking_repository.get_all.return_value = [booking1, booking2]
+    # Create a meeting room with bookings
+    meeting_room = MeetingRoom(room_id="main-room")
+    meeting_room.bookings = [booking1, booking2]
+
+    query_service.booking_repository.find_all.return_value = [meeting_room]
 
     expected_bookings = [
         {
@@ -57,4 +62,4 @@ def test_get_all_bookings_returns_formatted_bookings(query_service):
 
     # Assert
     assert bookings == expected_bookings
-    query_service.booking_repository.get_all.assert_called_once()
+    query_service.booking_repository.find_all.assert_called_once()

@@ -3,7 +3,6 @@ import logging
 from src.application.commands.commands import CreateBookingCommand
 from src.application.dtos.booking_response import BookingResponse
 from src.domain.aggregates.meeting_room import MeetingRoom
-from src.domain.entities.booking import Booking
 from src.domain.entities.timeslot import TimeSlot
 from src.domain.repositories.meeting_room_repository import MeetingRoomRepository
 
@@ -23,13 +22,23 @@ class BookingService:
             f"Attempting to create booking for {request.booker} from "
             f"{request.start_time} to {request.end_time} with {request.attendees} attendees."
         )
-        existing_bookings = self.booking_repository.get_all()
-        meeting_room = MeetingRoom(bookings=existing_bookings)
+
+        # Get or create the meeting room (assuming single room with ID "main-room")
+        room_id = "main-room"
+        meeting_room = self.booking_repository.find_by_id(room_id)
+        if meeting_room is None:
+            meeting_room = MeetingRoom(room_id=room_id)
+
+        # Create the booking
         timeslot = TimeSlot.create(request.start_time.isoformat(), request.end_time.isoformat())
-        booking = Booking.create(timeslot, request.booker, request.attendees)
+
         try:
-            meeting_room.book(booking.time_slot, booking.booker, booking.attendees)
-            self.booking_repository.add(booking)
+            # Use the meeting room aggregate to create the booking
+            booking = meeting_room.book(timeslot, request.booker, request.attendees)
+
+            # Save the updated meeting room
+            self.booking_repository.save(meeting_room)
+
             logger.info(f"Booking created successfully: {booking.booking_id}")
             return BookingResponse(
                 booking_id=booking.booking_id,
