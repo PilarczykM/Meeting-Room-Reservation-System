@@ -49,21 +49,21 @@
   - Test command execution with various argument combinations
   - _Requirements: 2.4, 2.5, 3.5, 5.4_
 
-- [ ] 8. Validate booking flow end-to-end
+- [x] 8. Validate booking flow end-to-end
   - Test complete booking flow: start app, run book command, enter valid data, confirm booking creation
   - Test booking validation: invalid dates, invalid attendee counts, overlapping bookings
   - Test booking cancellation: successful cancellation and error cases
   - Verify booking data persistence and retrieval through list command
   - _Requirements: 2.2, 2.3, 2.4, 2.5_
 
-- [-] 9. Validate cancellation flow end-to-end  
+- [x] 9. Validate cancellation flow end-to-end  
   - Test complete cancellation flow: create booking, run cancel command, enter booking ID, confirm cancellation
   - Test cancellation error cases: invalid booking ID, booking not found
   - Test cancellation confirmation workflow and user interaction
   - Verify cancelled bookings are removed and no longer appear in list command
   - _Requirements: 3.2, 3.3, 3.4, 3.5_
 
-- [ ] 10. Validate listing flow end-to-end
+- [x] 10. Validate listing flow end-to-end
   - Test list command with no bookings shows appropriate empty state message
   - Test list command with bookings shows formatted table with all booking details
   - Test list command sorting options (--sort time, --sort booker, --sort attendees)
