@@ -7,6 +7,7 @@ from rich.table import Table
 from src.application.commands.commands import CancelBookingCommand
 from src.application.dtos.cancellation_request import CancellationRequest
 from src.application.exceptions import CancellationFailedError
+from src.infrastructure.cli.input_handler import InterruptibleInput
 
 
 class CancellationCommand:
@@ -51,7 +52,7 @@ class CancellationCommand:
     def _get_booking_id_input(self):
         """Get booking ID from user input."""
         while True:
-            booking_id = input("Enter booking ID to cancel (or press Enter to exit): ").strip()
+            booking_id = InterruptibleInput.get_input("Enter booking ID to cancel (or press Enter to exit): ").strip()
             if not booking_id:
                 return None
 
@@ -100,7 +101,11 @@ class CancellationCommand:
 
         while True:
             confirm = (
-                input("\n[bold red]Are you sure you want to cancel this booking? (y/n): [/bold red]").strip().lower()
+                InterruptibleInput.get_input(
+                    "\n[bold red]Are you sure you want to cancel this booking? (y/n): [/bold red]"
+                )
+                .strip()
+                .lower()
             )
             if confirm in ["y", "yes"]:
                 return True

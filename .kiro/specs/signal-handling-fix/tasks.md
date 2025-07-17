@@ -14,7 +14,7 @@
   - Maintain existing graceful shutdown functionality
   - _Requirements: 1.3, 1.4, 1.5, 3.3_
 
-- [ ] 3. Update booking command to use interruptible input
+- [x] 3. Update booking command to use interruptible input
   - Replace all `input()` calls in `src/infrastructure/cli/commands/booking_command.py` with InterruptibleInput methods
   - Update `_get_datetime_input()` method to use interruptible input
   - Update `_get_attendees_input()` method to use interruptible input
@@ -22,14 +22,14 @@
   - Ensure KeyboardInterrupt exceptions are properly handled and propagated
   - _Requirements: 2.1, 2.5, 3.4, 3.5_
 
-- [ ] 4. Update cancellation command to use interruptible input
+- [x] 4. Update cancellation command to use interruptible input
   - Replace all `input()` calls in `src/infrastructure/cli/commands/cancellation_command.py` with InterruptibleInput methods
   - Update `_get_booking_id_input()` method to use interruptible input
   - Update `_confirm_cancellation()` method to use interruptible confirmation
   - Ensure KeyboardInterrupt exceptions are properly handled and propagated
   - _Requirements: 2.2, 2.5, 3.4, 3.5_
 
-- [ ] 5. Create unit tests for interruptible input utility
+- [x] 5. Create unit tests for interruptible input utility
   - Write tests for `InterruptibleInput.get_input()` method with normal input
   - Write tests for signal interruption during input operations
   - Write tests for `InterruptibleInput.get_confirmation()` method with various responses
@@ -37,7 +37,7 @@
   - Test error handling and edge cases
   - _Requirements: 1.1, 1.2, 3.1_
 
-- [ ] 6. Create unit tests for enhanced signal handling
+- [x] 6. Create unit tests for enhanced signal handling
   - Write tests for enhanced signal handler with immediate exit functionality
   - Test SIGINT handling returns exit code 130
   - Test SIGTERM handling returns exit code 1
@@ -45,7 +45,7 @@
   - Test graceful degradation when signal handler encounters errors
   - _Requirements: 1.3, 1.4, 1.5, 3.3_
 
-- [ ] 7. Create integration tests for CLI command signal handling
+- [x] 7. Create integration tests for CLI command signal handling
   - Write tests for booking command interruption at various input stages
   - Write tests for cancellation command interruption at various input stages
   - Test that normal command flow remains unaffected by signal handling changes
@@ -53,7 +53,7 @@
   - Verify consistent signal handling behavior across all commands
   - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 3.4, 3.5_
 
-- [ ] 8. Update existing CLI command tests
+- [x] 8. Update existing CLI command tests
   - Modify existing tests in `tests/infrastructure/cli/commands/` to account for new input handling
   - Update test mocks to work with InterruptibleInput instead of built-in input
   - Ensure all existing test scenarios continue to pass
