@@ -7,28 +7,28 @@
   - Implement service scope management for command handler creation
   - _Requirements: 5.1, 5.2, 5.4_
 
-- [ ] 2. Implement individual command registration methods
+- [x] 2. Implement individual command registration methods
   - Create _register_booking_command method that resolves BookingService and creates BookingCommand instance
   - Create _register_cancellation_command method that resolves CancellationService and QueryService
   - Create _register_list_command method that resolves QueryService and creates ListCommand instance
   - Register each command with CLI application using appropriate command names ("book", "cancel", "list")
   - _Requirements: 2.1, 3.1, 4.1, 5.3_
 
-- [ ] 3. Integrate command registration with application bootstrap
+- [x] 3. Integrate command registration with application bootstrap
   - Modify _create_cli_app method to call _register_cli_commands after creating CLIApp instance
   - Add exception handling to catch and wrap command registration errors as ApplicationError
   - Ensure command registration happens after service configuration is complete
   - Test that application bootstrap fails gracefully if command registration fails
   - _Requirements: 5.1, 5.4, 5.5_
 
-- [ ] 4. Validate command registration functionality
+- [x] 4. Validate command registration functionality
   - Write unit test to verify all three commands are registered with correct names
   - Write unit test to verify command handlers are callable and accept args parameter
   - Write unit test to verify service resolution works correctly during command registration
   - Write integration test to verify commands are available after application bootstrap
   - _Requirements: 1.4, 2.1, 3.1, 4.1_
 
-- [ ] 5. Test CLI help display functionality
+- [x] 5. Test CLI help display functionality
   - Write test to verify help message displays all registered commands when no arguments provided
   - Write test to verify command descriptions are shown in formatted table
   - Write test to verify "book", "cancel", and "list" commands appear in help output
