@@ -1,13 +1,13 @@
 # Implementation Plan
 
-- [ ] 1. Create interruptible input utility module
+- [x] 1. Create interruptible input utility module
   - Create `src/infrastructure/cli/input_handler.py` with InterruptibleInput class
   - Implement `get_input()` method that can be interrupted by signals
   - Implement `get_confirmation()` method for yes/no prompts with signal handling
   - Add proper error handling and fallback to standard input if needed
   - _Requirements: 1.1, 1.2, 3.1, 3.2_
 
-- [ ] 2. Enhance signal handler in main entry point
+- [x] 2. Enhance signal handler in main entry point
   - Modify signal handler in `main.py` to force immediate exit after graceful shutdown attempt
   - Ensure proper exit codes are returned (130 for SIGINT, 1 for SIGTERM)
   - Add robust error handling for signal handler failures
