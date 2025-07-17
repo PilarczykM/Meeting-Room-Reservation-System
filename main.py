@@ -180,11 +180,21 @@ def setup_signal_handlers(runner: ApplicationRunner) -> None:
     """
 
     def signal_handler(signum: int, frame) -> None:
-        """Handle shutdown signals."""
+        """Handle shutdown signals with immediate exit."""
         signal_names = {signal.SIGINT: "SIGINT", signal.SIGTERM: "SIGTERM"}
         signal_name = signal_names.get(signum, f"Signal {signum}")
         logger.info(f"Received {signal_name}, initiating graceful shutdown...")
-        runner.shutdown()
+
+        # Attempt graceful shutdown
+        try:
+            runner.shutdown()
+        except Exception:
+            # Log error but continue with exit
+            logger.exception("Error during graceful shutdown")
+
+        # Force exit with appropriate code
+        exit_code = 130 if signum == signal.SIGINT else 1
+        sys.exit(exit_code)
 
     # Set up handlers for common shutdown signals
     signal.signal(signal.SIGINT, signal_handler)  # Ctrl+C

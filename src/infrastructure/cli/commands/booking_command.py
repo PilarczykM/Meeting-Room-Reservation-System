@@ -7,6 +7,7 @@ from rich.table import Table
 from src.application.commands.commands import CreateBookingCommand
 from src.application.dtos.booking_request import BookingRequest
 from src.domain.exceptions import InvalidAttendeeCountError, OverlappingBookingError
+from src.infrastructure.cli.input_handler import InterruptibleInput
 
 
 class BookingCommand:
@@ -63,7 +64,7 @@ class BookingCommand:
 
         # Get booker name
         while True:
-            booker = input("Enter your name: ").strip()
+            booker = InterruptibleInput.get_input("Enter your name: ")
             if booker:
                 booking_data["booker"] = booker
                 break
@@ -80,7 +81,7 @@ class BookingCommand:
         """Get and validate datetime input from user."""
         while True:
             try:
-                time_str = input(prompt).strip()
+                time_str = InterruptibleInput.get_input(prompt)
                 if not time_str:
                     return None
 
@@ -102,7 +103,7 @@ class BookingCommand:
         """Get and validate attendees count from user."""
         while True:
             try:
-                attendees_str = input("Enter number of attendees (4-20): ").strip()
+                attendees_str = InterruptibleInput.get_input("Enter number of attendees (4-20): ")
                 if not attendees_str:
                     return None
 
@@ -136,14 +137,7 @@ class BookingCommand:
 
         self.console.print(table)
 
-        while True:
-            confirm = input("\nConfirm booking? (y/n): ").strip().lower()
-            if confirm in ["y", "yes"]:
-                return True
-            elif confirm in ["n", "no"]:
-                return False
-            else:
-                self.console.print("[red]Please enter 'y' for yes or 'n' for no.[/red]")
+        return InterruptibleInput.get_confirmation("\nConfirm booking? (y/n): ")
 
     def _create_booking(self, booking_data):
         """Create the booking using the booking service."""
