@@ -202,16 +202,25 @@ class TestMainEntryPoint:
         runner = Mock()
 
         with patch("signal.signal") as mock_signal:
-            setup_signal_handlers(runner)
+            with patch("sys.exit") as mock_exit:  # Mock sys.exit to prevent test termination
+                setup_signal_handlers(runner)
 
-            # Get the signal handler function
-            sigint_handler = mock_signal.call_args_list[0][0][1]
+                # Find the SIGINT handler from the mock calls
+                sigint_handler = None
+                for call in mock_signal.call_args_list:
+                    if call[0][0] == signal.SIGINT:
+                        sigint_handler = call[0][1]
+                        break
 
-            # Call the handler
-            sigint_handler(2, None)  # SIGINT signal number
+                assert sigint_handler is not None, "SIGINT handler should be registered"
 
-            # Should call shutdown on runner
-            runner.shutdown.assert_called_once()
+                # Call the handler
+                sigint_handler(signal.SIGINT, None)
+
+                # Should call shutdown on runner
+                runner.shutdown.assert_called_once()
+                # Should also call sys.exit
+                mock_exit.assert_called_once_with(130)
 
     def test_main_function_success(self):
         """Test main function with successful execution."""
